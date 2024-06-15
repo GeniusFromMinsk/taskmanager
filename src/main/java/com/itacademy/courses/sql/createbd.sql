@@ -22,6 +22,7 @@ CREATE TABLE Tasks (
                        FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
+
 -- Create Categories table
 CREATE TABLE Categories (
                             category_id SERIAL PRIMARY KEY,

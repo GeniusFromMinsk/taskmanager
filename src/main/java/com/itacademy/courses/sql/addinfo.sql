@@ -3,6 +3,7 @@ INSERT INTO Users (username, email, password) VALUES
                                                   ('Yamal', 'yamal@gmail.com', '1234567890'),
                                                   ('Kirill', 'kirille@@gmail.com', '1234567123');
 
+
 -- Insert test data into Tasks table
 INSERT INTO Tasks (user_id, title, description, status, priority, due_date) VALUES
                                                                                 (1, 'Task 1', 'Description for task 1', 'pending', 'high', '2024-06-20'),
