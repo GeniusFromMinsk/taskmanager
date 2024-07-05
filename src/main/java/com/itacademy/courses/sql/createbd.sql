@@ -1,115 +1,115 @@
--- Create Users table
-CREATE TABLE Users (
-                       user_id SERIAL PRIMARY KEY,
-                       username VARCHAR(50) NOT NULL,
-                       email VARCHAR(100) NOT NULL,
-                       password VARCHAR(255) NOT NULL,
-                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Создание таблицы USERS
+CREATE TABLE USERS (
+                       ID SERIAL PRIMARY KEY,
+                       USERNAME VARCHAR(50) NOT NULL,
+                       EMAIL VARCHAR(100) NOT NULL,
+                       PASSWORD VARCHAR(255) NOT NULL,
+                       CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                       UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create Tasks table
-CREATE TABLE Tasks (
-                       task_id SERIAL PRIMARY KEY,
-                       user_id INT,
-                       title VARCHAR(100) NOT NULL,
-                       description TEXT,
-                       status VARCHAR(20) NOT NULL,
-                       priority VARCHAR(10),
-                       due_date DATE,
-                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                       FOREIGN KEY (user_id) REFERENCES Users(user_id)
+-- Создание таблицы TASKS
+CREATE TABLE TASKS (
+                       ID SERIAL PRIMARY KEY,
+                       USER_ID INT NOT NULL,
+                       TITLE VARCHAR(100) NOT NULL,
+                       DESCRIPTION TEXT NOT NULL,
+                       STATUS VARCHAR(20) NOT NULL,
+                       PRIORITY VARCHAR(10) NOT NULL,
+                       DUE_DATE DATE NOT NULL,
+                       REMINDER_TIME TIMESTAMP,
+                       CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                       UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                       FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
 );
 
--- Create Categories table
-CREATE TABLE Categories (
-                            category_id SERIAL PRIMARY KEY,
-                            name VARCHAR(50) NOT NULL,
-                            description TEXT
+-- Создание таблицы CATEGORIES
+CREATE TABLE CATEGORIES (
+                            ID SERIAL PRIMARY KEY,
+                            NAME VARCHAR(50) NOT NULL,
+                            DESCRIPTION TEXT NOT NULL,
+                            CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create TaskCategories table (many-to-many)
-CREATE TABLE TaskCategories (
-                                task_id INT,
-                                category_id INT,
-                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                PRIMARY KEY (task_id, category_id),
-                                FOREIGN KEY (task_id) REFERENCES Tasks(task_id),
-                                FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+-- Создание таблицы TASK_CATEGORIES (связь многие ко многим)
+CREATE TABLE TASK_CATEGORIES (
+                                 TASK_ID INT,
+                                 CATEGORY_ID INT,
+                                 CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                 UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                 PRIMARY KEY (TASK_ID, CATEGORY_ID),
+                                 FOREIGN KEY (TASK_ID) REFERENCES TASKS(ID),
+                                 FOREIGN KEY (CATEGORY_ID) REFERENCES CATEGORIES(ID)
 );
 
--- Create Reminders table
-CREATE TABLE Reminders (
-                           reminder_id SERIAL PRIMARY KEY,
-                           task_id INT,
-                           reminder_time TIMESTAMP,
-                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                           FOREIGN KEY (task_id) REFERENCES Tasks(task_id)
+-- Создание таблицы TAGS
+CREATE TABLE TAGS (
+                      ID SERIAL PRIMARY KEY,
+                      NAME VARCHAR(50) NOT NULL,
+                      CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                      UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create Tags table
-CREATE TABLE Tags (
-                      tag_id SERIAL PRIMARY KEY,
-                      name VARCHAR(50) NOT NULL
+-- Создание таблицы TASK_TAGS (связь многие ко многим)
+CREATE TABLE TASK_TAGS (
+                           TASK_ID INT,
+                           TAG_ID INT,
+                           CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           PRIMARY KEY (TASK_ID, TAG_ID),
+                           FOREIGN KEY (TASK_ID) REFERENCES TASKS(ID),
+                           FOREIGN KEY (TAG_ID) REFERENCES TAGS(ID)
 );
 
--- Create TaskTags table (many-to-many)
-CREATE TABLE TaskTags (
-                          task_id INT,
-                          tag_id INT,
-                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                          PRIMARY KEY (task_id, tag_id),
-                          FOREIGN KEY (task_id) REFERENCES Tasks(task_id),
-                          FOREIGN KEY (tag_id) REFERENCES Tags(tag_id)
+-- Создание таблицы REPORTS
+CREATE TABLE REPORTS (
+                         ID SERIAL PRIMARY KEY,
+                         USER_ID INT NOT NULL,
+                         CONTENT TEXT NOT NULL,
+                         CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
 );
 
--- Create Reports table
-CREATE TABLE Reports (
-                         report_id SERIAL PRIMARY KEY,
-                         user_id INT,
-                         content TEXT,
-                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         FOREIGN KEY (user_id) REFERENCES Users(user_id)
+-- Создание таблицы FILTERS
+CREATE TABLE FILTERS (
+                         ID SERIAL PRIMARY KEY,
+                         FILTER_NAME VARCHAR(50) NOT NULL,
+                         CRITERIA VARCHAR(100) NOT NULL,
+                         CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create Filters table
-CREATE TABLE Filters (
-                         filter_id SERIAL PRIMARY KEY,
-                         user_id INT,
-                         filter_name VARCHAR(50) NOT NULL,
-                         criteria JSON,
-                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         FOREIGN KEY (user_id) REFERENCES Users(user_id)
+-- Создание таблицы PROJECTS
+CREATE TABLE PROJECTS (
+                          ID SERIAL PRIMARY KEY,
+                          USER_ID INT NOT NULL,
+                          NAME VARCHAR(100) NOT NULL,
+                          DESCRIPTION TEXT NOT NULL,
+                          CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
 );
 
--- Create Projects table
-CREATE TABLE Projects (
-                          project_id SERIAL PRIMARY KEY,
-                          user_id INT,
-                          name VARCHAR(100) NOT NULL,
-                          description TEXT,
-                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                          FOREIGN KEY (user_id) REFERENCES Users(user_id)
+-- Создание таблицы PROJECT_TASKS (связь многие ко многим)
+CREATE TABLE PROJECT_TASKS (
+                               ID INT,
+                               TASK_ID INT,
+                               CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                               UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                               PRIMARY KEY (ID, TASK_ID),
+                               FOREIGN KEY (ID) REFERENCES PROJECTS(ID),
+                               FOREIGN KEY (TASK_ID) REFERENCES TASKS(ID)
 );
 
--- Create ProjectTasks table (many-to-many)
-CREATE TABLE ProjectTasks (
-                              project_id INT,
-                              task_id INT,
-                              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                              PRIMARY KEY (project_id, task_id),
-                              FOREIGN KEY (project_id) REFERENCES Projects(project_id),
-                              FOREIGN KEY (task_id) REFERENCES Tasks(task_id)
-);
-
--- Create Subtasks table
-CREATE TABLE Subtasks (
-                          subtask_id SERIAL PRIMARY KEY,
-                          task_id INT,
-                          title VARCHAR(100) NOT NULL,
-                          status VARCHAR(20),
-                          due_date DATE,
-                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                          FOREIGN KEY (task_id) REFERENCES Tasks(task_id)
+-- Создание таблицы SUBTASKS
+CREATE TABLE SUBTASKS (
+                          ID SERIAL PRIMARY KEY,
+                          TASK_ID INT NOT NULL,
+                          TITLE VARCHAR(100) NOT NULL,
+                          STATUS VARCHAR(20) NOT NULL,
+                          DUE_DATE DATE NOT NULL,
+                          CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          FOREIGN KEY (TASK_ID) REFERENCES TASKS(ID)
 );
