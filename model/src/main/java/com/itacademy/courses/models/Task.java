@@ -5,110 +5,72 @@ import java.util.Date;
 
 public class Task {
     private int id;
-    private int user_id;
+    private int userId;
     private String title;
     private String description;
     private String status;
     private String priority;
-    private Date due_date;
-    private Timestamp reminder_time;
-    private Timestamp created_at;
-    private Timestamp updated_at;
-
-    // Getters and setters
+    private Date dueDate;
+    private Timestamp reminderTime;
     public int getTaskId() {
         return id;
     }
-
     public void setTaskId(int taskId) {
         this.id = taskId;
     }
-
     public int getUserId() {
-        return user_id;
+        return userId;
     }
-
     public void setUserId(int userId) {
-        this.user_id = userId;
+        this.userId = userId;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
-
     public String getPriority() {
         return priority;
     }
-
     public void setPriority(String priority) {
         this.priority = priority;
     }
-
     public Date getDueDate() {
-        return due_date;
+        return dueDate;
     }
-
     public void setDueDate(Date dueDate) {
-        this.due_date = dueDate;
+        this.dueDate = dueDate;
     }
-
     public Timestamp getReminderTime() {
-        return reminder_time;
+        return reminderTime;
     }
-
     public void setReminderTime(Timestamp reminderTime) {
-        this.reminder_time = reminderTime;
+        this.reminderTime = reminderTime;
     }
-
-    public Timestamp getCreatedAt() {
-        return created_at;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.created_at = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updated_at;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updated_at = updatedAt;
-    }
-
     @Override
     public String toString() {
         return "Task{" +
                 "id=" + id +
-                ", user_id=" + user_id +
+                ", user_id=" + userId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
                 ", priority='" + priority + '\'' +
-                ", due_date=" + due_date +
-                ", reminder_time=" + reminder_time +
-                ", created_at=" + created_at +
-                ", updated_at=" + updated_at +
+                ", due_date=" + dueDate +
+                ", reminder_time=" + reminderTime +
                 '}';
     }
 }

@@ -71,15 +71,6 @@ CREATE TABLE REPORTS (
                          FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
 );
 
--- Создание таблицы FILTERS
-CREATE TABLE FILTERS (
-                         ID SERIAL PRIMARY KEY,
-                         FILTER_NAME VARCHAR(50) NOT NULL,
-                         CRITERIA VARCHAR(100) NOT NULL,
-                         CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Создание таблицы PROJECTS
 CREATE TABLE PROJECTS (
                           ID SERIAL PRIMARY KEY,

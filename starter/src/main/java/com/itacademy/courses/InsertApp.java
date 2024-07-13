@@ -10,23 +10,15 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class InsertApp {
-
     private final UserService userService;
     private final ProjectService projectService;
-
     private final TaskService taskService;
     private final TagService tagService;
     private final TaskTagService taskTagService;
     private final CategoryService categoryService;
-
-    private final FilterService filterService;
-
     private final ReportService reportService;
-
     private final SubtaskService subtaskService;
-
     private final TaskCategoryService taskCategoryService;
-
     private final ProjectTaskService projectTaskService;
 
     public InsertApp() {
@@ -36,7 +28,6 @@ public class InsertApp {
         this.tagService = new TagService();
         this.taskTagService = new TaskTagService();
         this.categoryService = new CategoryService();
-        this.filterService = new FilterService();
         this.reportService = new ReportService();
         this.subtaskService = new SubtaskService();
         this.taskCategoryService = new TaskCategoryService();
@@ -45,39 +36,37 @@ public class InsertApp {
 
     public void start() throws ParseException {
         User user = new User();
-        Task task = new Task();
+        // Task task = new Task();
         createUser(user);
-        createTag();
-        createFiler();
-        createReportsForUser();
-        if (user != null) {
-          createProjectForUser();
-          createTaskForUser(user);
-          System.out.println("Пользователь и проект успешно созданы!");
-        } else {
-            System.err.println("Ошибка при создании пользователя.");
-        }
+        //createTag();
+        //createReportsForUser();
+       // if (user != null) {
+       //   createProjectForUser();
+        //  createTaskForUser(user);
+       //   System.out.println("Пользователь и проект успешно созданы!");
+      //  } else {
+      //      System.err.println("Ошибка при создании пользователя.");
+     //   }
 
-        if(task != null){
-            createSubTask();
-            System.out.println("Подзадача создана");
-        }
-        else {
-            System.err.println("ошибка при создании подзадачи");
-        }
-
-        createCategories();
-        createTaskCategory();
-        createTaskTag();
-        createProjectTask();
+     //   if(task != null){
+      //      createSubTask();
+      //      System.out.println("Подзадача создана");
+      //  }
+      //  else {
+      //      System.err.println("ошибка при создании подзадачи");
+     //   }
+//
+      //  createCategories();
+     //   createTaskCategory();
+      //  createTaskTag();
+      //  createProjectTask();
     }
 
     private void createUser(User user){
-        user.setUsername("john_doe");
-        user.setEmail("john.doe@example.com");
-        user.setPassword("1234");
-        userService.createUser(user);
-        System.out.println("создан новый пользователь" + user);
+        user.setUsername("Kirilll123");
+        user.setEmail("kkx.eeex@example.com");
+        user.setPassword("1111");
+        userService.registerUser(user);
     }
 
     private void createCategories(){
@@ -87,15 +76,6 @@ public class InsertApp {
         categoryService.createCategory(category);
         System.out.println("создана категория задачи" + category);
     }
-
-    private void createFiler(){
-        Filter filter = new Filter();
-        filter.setName("Completed Tasks");
-        filter.setCriteria("status: completed");
-        filterService.createFilter(filter);
-        System.out.println("создан фильтер" + filter);
-    }
-
     private void createTag(){
         Tag tag = new Tag();
         tag.setName("home");

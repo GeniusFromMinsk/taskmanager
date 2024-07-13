@@ -1,6 +1,7 @@
 package com.itacademy.courses.dao;
 
 import com.itacademy.courses.db.DBConnection;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Task;
 
 import java.sql.*;
@@ -9,16 +10,16 @@ import java.util.List;
 
 public class TaskDAO {
 
-    private static final String SELECT_TASKS_BY_STATUS_SQL = "SELECT * FROM Tasks WHERE status = ?";
-    private static final String SELECT_TASKS_BY_PRIORITY_SQL = "SELECT * FROM Tasks WHERE priority = ?";
-    private static final String INSERT_TASK_SQL = "INSERT INTO Tasks (user_id, title, description, status, priority, due_date, reminder_time) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_TASK_BY_ID = "SELECT * FROM Tasks WHERE id = ?";
-    private static final String SELECT_ALL_TASKS = "SELECT * FROM Tasks";
-    private static final String DELETE_TASK_SQL = "DELETE FROM Tasks WHERE id = ?";
-    private static final String UPDATE_TASK_SQL = "UPDATE Tasks SET user_id = ?, title = ?, description = ?, status = ?, priority = ?, due_date = ?, reminder_time = ? WHERE id = ?";
+    private static final String SELECT_TASKS_BY_STATUS_SQL = "SELECT * FROM TASKS WHERE STATUS = ?";
+    private static final String SELECT_TASKS_BY_PRIORITY_SQL = "SELECT * FROM TASKS WHERE PRIORITY = ?";
+    private static final String INSERT_TASK_SQL = "INSERT INTO TASKS (USER_ID, TITLE, DESCRIPTION, STATUS, PRIORITY, DUE_DATE, REMINDER_TIME) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_TASK_BY_ID = "SELECT * FROM TASKS WHERE ID = ?";
+    private static final String SELECT_ALL_TASKS = "SELECT * FROM TASKS";
+    private static final String DELETE_TASK_SQL = "DELETE FROM TASKS WHERE ID = ?";
+    private static final String UPDATE_TASK_SQL = "UPDATE TASKS SET USER_ID = ?, TITLE = ?, DESCRIPTION = ?, STATUS = ?, PRIORITY = ?, DUE_DATE = ?, REMINDER_TIME = ? WHERE ID = ?";
 
     public void insertTask(Task task) throws SQLException {
-        try (Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TASK_SQL)) {
             preparedStatement.setInt(1, task.getUserId());
             preparedStatement.setString(2, task.getTitle());
@@ -29,13 +30,13 @@ public class TaskDAO {
             preparedStatement.setTimestamp(7, task.getReminderTime());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            printSQLException(e);
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 
     public Task selectTask(int taskId) {
         Task task = null;
-        try (Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TASK_BY_ID)) {
             preparedStatement.setInt(1, taskId);
             ResultSet rs = preparedStatement.executeQuery();
@@ -56,14 +57,14 @@ public class TaskDAO {
                 task.setDueDate(dueDate);
             }
         } catch (SQLException e) {
-            printSQLException(e);
+            SQLExceptionHandler.printSQLException(e);
         }
         return task;
     }
 
     public List<Task> selectAllTasks() {
         List<Task> tasks = new ArrayList<>();
-        try (Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_TASKS)) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -85,14 +86,14 @@ public class TaskDAO {
                 tasks.add(task);
             }
         } catch (SQLException e) {
-            printSQLException(e);
+            SQLExceptionHandler.printSQLException(e);
         }
         return tasks;
     }
 
     public boolean deleteTask(int taskId) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_TASK_SQL)) {
             statement.setInt(1, taskId);
             rowDeleted = statement.executeUpdate() > 0;
@@ -102,7 +103,7 @@ public class TaskDAO {
 
     public boolean updateTask(Task task) throws SQLException {
         boolean rowUpdated;
-        try (Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_TASK_SQL)) {
             statement.setInt(1, task.getUserId());
             statement.setString(2, task.getTitle());
@@ -119,7 +120,7 @@ public class TaskDAO {
 
     public List<Task> selectTasksByStatus(String status) {
         List<Task> tasks = new ArrayList<>();
-        try (Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TASKS_BY_STATUS_SQL)) {
             preparedStatement.setString(1, status);
             ResultSet rs = preparedStatement.executeQuery();
@@ -128,14 +129,14 @@ public class TaskDAO {
                 tasks.add(task);
             }
         } catch (SQLException e) {
-            printSQLException(e);
+            SQLExceptionHandler.printSQLException(e);
         }
         return tasks;
     }
 
     public List<Task> selectTasksByPriority(String priority) {
         List<Task> tasks = new ArrayList<>();
-        try (Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TASKS_BY_PRIORITY_SQL)) {
             preparedStatement.setString(1, priority);
             ResultSet rs = preparedStatement.executeQuery();
@@ -144,7 +145,7 @@ public class TaskDAO {
                 tasks.add(task);
             }
         } catch (SQLException e) {
-            printSQLException(e);
+            SQLExceptionHandler.printSQLException(e);
         }
         return tasks;
     }
@@ -158,24 +159,6 @@ public class TaskDAO {
         task.setStatus(rs.getString("status"));
         task.setPriority(rs.getString("priority"));
         task.setDueDate(rs.getDate("due_date"));
-        task.setCreatedAt(rs.getTimestamp("created_at"));
-        task.setUpdatedAt(rs.getTimestamp("updated_at"));
         return task;
-    }
-
-    private void printSQLException(SQLException ex) {
-        for (Throwable e : ex) {
-            if (e instanceof SQLException) {
-                e.printStackTrace(System.err);
-                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-                System.err.println("Message: " + e.getMessage());
-                Throwable t = ex.getCause();
-                while (t != null) {
-                    System.out.println("Cause: " + t);
-                    t = t.getCause();
-                }
-            }
-        }
     }
 }

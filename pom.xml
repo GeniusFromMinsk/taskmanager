@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <name>taskmanager</name>
-  <url>http://maven.apache.org</url>
+
   <modules>
     <module>service</module>
     <module>dao</module>

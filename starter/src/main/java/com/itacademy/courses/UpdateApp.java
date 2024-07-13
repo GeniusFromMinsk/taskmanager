@@ -10,13 +10,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class UpdateApp {
-
     private final UserService userService;
     private final ProjectService projectService;
     private final TaskService taskService;
     private final TagService tagService;
     private final CategoryService categoryService;
-    private final FilterService filterService;
     private final ReportService reportService;
     private final SubtaskService subtaskService;
 
@@ -26,7 +24,6 @@ public class UpdateApp {
         this.taskService = new TaskService();
         this.tagService = new TagService();
         this.categoryService = new CategoryService();
-        this.filterService = new FilterService();
         this.reportService = new ReportService();
         this.subtaskService = new SubtaskService();
     }
@@ -35,7 +32,6 @@ public class UpdateApp {
         //User user = new User();
         //updateUser(user);
         //updateProject();
-        //updateFilter();
         //updateTask();
         //updateTag();
         //updateCategory();
@@ -73,24 +69,6 @@ public class UpdateApp {
             System.err.println("Ошибка при обновлении проекта.");
         }
     }
-
-
-
-    private void updateFilter() {
-        Filter filter = new Filter();
-        filter.setFilterId(2); // Установите существующий ID фильтра
-        filter.setName("Обновленный фильтр");
-        filter.setCriteria("status: in-progress");
-
-        boolean success = filterService.updateFilter(filter);
-        if (success) {
-            System.out.println("Обновлен фильтр: " + filter);
-        } else {
-            System.err.println("Ошибка при обновлении фильтра.");
-        }
-    }
-
-
 
     private void updateTask() throws ParseException {
         Task task = new Task();

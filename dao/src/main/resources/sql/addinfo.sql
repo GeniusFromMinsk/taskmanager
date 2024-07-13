@@ -35,11 +35,6 @@ INSERT INTO REPORTS (USER_ID, CONTENT) VALUES
                                            (1, 'Report content for user 1'),
                                            (2, 'Report content for user 2');
 
--- Вставка тестовых данных в таблицу FILTERS
-INSERT INTO FILTERS (FILTER_NAME, CRITERIA) VALUES
-                                                ('High Priority', '{"priority": "high"}'),
-                                                ('Completed Tasks', '{"status": "completed"}');
-
 -- Вставка тестовых данных в таблицу PROJECTS
 INSERT INTO PROJECTS (USER_ID, NAME, DESCRIPTION) VALUES
                                                       (1, 'Project 1', 'Description for project 1'),

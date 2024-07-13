@@ -13,26 +13,34 @@ public class UserService {
         this.userDAO = new UserDAO();
     }
 
-    public void createUser(User user) {
+    public void registerUser(User user) {
         try {
+            if (userDAO.isUserExists(user.getEmail(), user.getUsername())) {
+                System.out.println("Пользователь не был создан, такой уже существует");
+            }
             userDAO.insertUser(user);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public User loginUser(String email, String password) {
+        try {
+            List<User> users = userDAO.getAllUsers();
+            for (User user : users) {
+                if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean updateUser(User user) {
         try {
             return userDAO.updateUser(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean deleteUser(int userId) {
-        try {
-            return userDAO.deleteUser(userId);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
