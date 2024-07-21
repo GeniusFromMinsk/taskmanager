@@ -1,10 +1,10 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.CategoryDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Category;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class CategoryService {
     private CategoryDAO categoryDAO;
@@ -17,7 +17,7 @@ public class CategoryService {
         try {
             categoryDAO.insertCategory(category);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 
@@ -26,7 +26,7 @@ public class CategoryService {
         try {
             return categoryDAO.updateCategory(category);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }
@@ -35,7 +35,7 @@ public class CategoryService {
         try {
             return categoryDAO.deleteCategory(categoryId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }

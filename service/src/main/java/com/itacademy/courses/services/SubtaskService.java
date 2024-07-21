@@ -1,6 +1,7 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.SubtaskDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Subtask;
 
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public class SubtaskService {
         try {
             subtaskDAO.insertSubtask(subtask);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 
@@ -26,7 +27,7 @@ public class SubtaskService {
         try {
             return subtaskDAO.updateSubtask(subtask);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }
@@ -35,7 +36,7 @@ public class SubtaskService {
         try {
             return subtaskDAO.deleteSubtask(subtaskId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }

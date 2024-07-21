@@ -1,6 +1,7 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.ProjectTaskDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.ProjectTask;
 
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public class ProjectTaskService {
         try {
             projectTaskDAO.insertProjectTask(projectTask);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 }

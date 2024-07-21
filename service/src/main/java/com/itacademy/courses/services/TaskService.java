@@ -1,6 +1,8 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.TaskDAO;
+import com.itacademy.courses.enums.TaskFilter;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Task;
 
 import java.sql.SQLException;
@@ -17,7 +19,7 @@ public class TaskService {
         try {
             taskDAO.insertTask(task);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 
@@ -33,7 +35,7 @@ public class TaskService {
         try {
             return taskDAO.updateTask(task);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }
@@ -42,17 +44,13 @@ public class TaskService {
         try {
             return taskDAO.deleteTask(taskId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }
 
-    public List<Task> getTasksByStatus(String status) {
-        return taskDAO.selectTasksByStatus(status);
-    }
-
-    public List<Task> getTasksByPriority(String priority) {
-        return taskDAO.selectTasksByPriority(priority);
+    public List<Task> getTasksByFilter(TaskFilter filter, String filterValue) {
+        return taskDAO.selectTasksByFilter(filter, filterValue);
     }
 
 }

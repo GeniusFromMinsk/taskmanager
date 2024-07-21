@@ -1,6 +1,7 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.ReportDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Report;
 
 import java.sql.SQLException;
@@ -17,7 +18,7 @@ public class ReportService {
         try {
             reportDAO.insertReport(report);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 
@@ -26,7 +27,7 @@ public class ReportService {
         try {
             return reportDAO.updateReport(report);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }
@@ -35,7 +36,7 @@ public class ReportService {
         try {
             return reportDAO.deleteReport(reportId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }

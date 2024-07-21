@@ -1,5 +1,6 @@
 package com.itacademy.courses;
 
+import com.itacademy.courses.enums.TaskFilter;
 import com.itacademy.courses.models.Task;
 import com.itacademy.courses.services.TaskService;
 
@@ -15,8 +16,7 @@ public class SelectApp {
     public void start() {
         selectTaskById();
         selectAllTasks();
-        selectTasksByStatus();
-        selectTasksByPriority();
+        selectByFilter();
     }
 
     private void selectTaskById() {
@@ -37,20 +37,9 @@ public class SelectApp {
         }
     }
 
-    private void selectTasksByStatus() {
-        String status = "В работе"; // Установите нужный статус
-        List<Task> tasks = taskService.getTasksByStatus(status);
-        System.out.println("Задачи со статусом " + status + ":");
-        for (Task task : tasks) {
-            System.out.println(task);
-        }
-    }
-
-    private void selectTasksByPriority() {
-        String priority = "high"; // Установите нужный приоритет
-        List<Task> tasks = taskService.getTasksByPriority(priority);
-        System.out.println("Задачи с приоритетом " + priority + ":");
-        for (Task task : tasks) {
+    private void selectByFilter(){
+        List<Task> highPriorityTasks = taskService.getTasksByFilter(TaskFilter.BY_PRIORITY, "high");
+        for (Task task : highPriorityTasks) {
             System.out.println(task);
         }
     }

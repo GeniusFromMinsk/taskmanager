@@ -1,6 +1,7 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.TagDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Tag;
 
 import java.sql.SQLException;
@@ -17,7 +18,7 @@ public class TagService {
         try {
             tagDAO.insertTag(tag);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 
@@ -25,7 +26,7 @@ public class TagService {
         try {
             return tagDAO.updateTag(tag);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }
@@ -34,7 +35,7 @@ public class TagService {
         try {
             return tagDAO.deleteTag(tagId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }

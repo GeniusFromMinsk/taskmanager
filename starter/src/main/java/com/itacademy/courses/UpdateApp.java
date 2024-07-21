@@ -29,14 +29,6 @@ public class UpdateApp {
     }
 
     public void start() throws ParseException {
-        //User user = new User();
-        //updateUser(user);
-        //updateProject();
-        //updateTask();
-        //updateTag();
-        //updateCategory();
-        //updateReport();
-        //updateSubtask();
     }
 
     private void updateUser(User user){

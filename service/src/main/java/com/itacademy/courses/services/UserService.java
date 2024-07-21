@@ -1,6 +1,7 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.UserDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.User;
 
 import java.sql.SQLException;
@@ -20,7 +21,7 @@ public class UserService {
             }
             userDAO.insertUser(user);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 
@@ -33,7 +34,7 @@ public class UserService {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
         return null;
     }
@@ -42,7 +43,7 @@ public class UserService {
         try {
             return userDAO.updateUser(user);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }

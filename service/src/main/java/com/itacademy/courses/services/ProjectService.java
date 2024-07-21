@@ -1,5 +1,6 @@
 package com.itacademy.courses.services;
 import com.itacademy.courses.dao.ProjectDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Project;
 
 import java.sql.SQLException;
@@ -17,7 +18,7 @@ public class ProjectService {
         try {
             projectDAO.insertProject(project);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 
@@ -25,7 +26,7 @@ public class ProjectService {
         try {
             return projectDAO.updateProject(project);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }
@@ -34,7 +35,7 @@ public class ProjectService {
         try {
             return projectDAO.deleteProject(projectId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
             return false;
         }
     }

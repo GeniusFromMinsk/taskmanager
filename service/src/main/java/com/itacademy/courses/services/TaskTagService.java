@@ -1,6 +1,7 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.TaskTagDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.TaskTag;
 
 import java.sql.SQLException;
@@ -17,7 +18,7 @@ public class TaskTagService {
         try {
             taskTagDAO.insertTaskTag(taskTag);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLExceptionHandler.printSQLException(e);
         }
     }
 

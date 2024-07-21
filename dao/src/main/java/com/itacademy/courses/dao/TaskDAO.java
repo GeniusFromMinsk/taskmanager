@@ -1,6 +1,7 @@
 package com.itacademy.courses.dao;
 
 import com.itacademy.courses.db.DBConnection;
+import com.itacademy.courses.enums.TaskFilter;
 import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Task;
 
@@ -10,8 +11,6 @@ import java.util.List;
 
 public class TaskDAO {
 
-    private static final String SELECT_TASKS_BY_STATUS_SQL = "SELECT * FROM TASKS WHERE STATUS = ?";
-    private static final String SELECT_TASKS_BY_PRIORITY_SQL = "SELECT * FROM TASKS WHERE PRIORITY = ?";
     private static final String INSERT_TASK_SQL = "INSERT INTO TASKS (USER_ID, TITLE, DESCRIPTION, STATUS, PRIORITY, DUE_DATE, REMINDER_TIME) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_TASK_BY_ID = "SELECT * FROM TASKS WHERE ID = ?";
     private static final String SELECT_ALL_TASKS = "SELECT * FROM TASKS";
@@ -40,21 +39,8 @@ public class TaskDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TASK_BY_ID)) {
             preparedStatement.setInt(1, taskId);
             ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                int userId = rs.getInt("user_id");
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                String status = rs.getString("status");
-                String priority = rs.getString("priority");
-                Date dueDate = rs.getDate("due_date");
-                task = new Task();
-                task.setTaskId(taskId);
-                task.setUserId(userId);
-                task.setTitle(title);
-                task.setDescription(description);
-                task.setStatus(status);
-                task.setPriority(priority);
-                task.setDueDate(dueDate);
+            if (rs.next()) {
+                task = extractTaskFromResultSet(rs);
             }
         } catch (SQLException e) {
             SQLExceptionHandler.printSQLException(e);
@@ -68,21 +54,7 @@ public class TaskDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_TASKS)) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                int taskId = rs.getInt("id");
-                int userId = rs.getInt("user_id");
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                String status = rs.getString("status");
-                String priority = rs.getString("priority");
-                Date dueDate = rs.getDate("due_date");
-                Task task = new Task();
-                task.setTaskId(taskId);
-                task.setUserId(userId);
-                task.setTitle(title);
-                task.setDescription(description);
-                task.setStatus(status);
-                task.setPriority(priority);
-                task.setDueDate(dueDate);
+                Task task = extractTaskFromResultSet(rs);
                 tasks.add(task);
             }
         } catch (SQLException e) {
@@ -118,27 +90,11 @@ public class TaskDAO {
         return rowUpdated;
     }
 
-    public List<Task> selectTasksByStatus(String status) {
+    public List<Task> selectTasksByFilter(TaskFilter filter, String filterValue) {
         List<Task> tasks = new ArrayList<>();
         try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TASKS_BY_STATUS_SQL)) {
-            preparedStatement.setString(1, status);
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                Task task = extractTaskFromResultSet(rs);
-                tasks.add(task);
-            }
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-        }
-        return tasks;
-    }
-
-    public List<Task> selectTasksByPriority(String priority) {
-        List<Task> tasks = new ArrayList<>();
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TASKS_BY_PRIORITY_SQL)) {
-            preparedStatement.setString(1, priority);
+             PreparedStatement preparedStatement = connection.prepareStatement(filter.getQuery())) {
+            preparedStatement.setString(1, filterValue);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Task task = extractTaskFromResultSet(rs);
@@ -159,6 +115,7 @@ public class TaskDAO {
         task.setStatus(rs.getString("status"));
         task.setPriority(rs.getString("priority"));
         task.setDueDate(rs.getDate("due_date"));
+        task.setReminderTime(rs.getTimestamp("reminder_time"));
         return task;
     }
 }

@@ -35,31 +35,6 @@ public class InsertApp {
     }
 
     public void start() throws ParseException {
-        User user = new User();
-        // Task task = new Task();
-        createUser(user);
-        //createTag();
-        //createReportsForUser();
-       // if (user != null) {
-       //   createProjectForUser();
-        //  createTaskForUser(user);
-       //   System.out.println("Пользователь и проект успешно созданы!");
-      //  } else {
-      //      System.err.println("Ошибка при создании пользователя.");
-     //   }
-
-     //   if(task != null){
-      //      createSubTask();
-      //      System.out.println("Подзадача создана");
-      //  }
-      //  else {
-      //      System.err.println("ошибка при создании подзадачи");
-     //   }
-//
-      //  createCategories();
-     //   createTaskCategory();
-      //  createTaskTag();
-      //  createProjectTask();
     }
 
     private void createUser(User user){
