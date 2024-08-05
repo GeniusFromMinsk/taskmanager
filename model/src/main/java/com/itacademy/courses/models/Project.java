@@ -1,16 +1,24 @@
 package com.itacademy.courses.models;
 
-import java.sql.Timestamp;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "projects")
 public class Project {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int userId;
-
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public int getProjectId() {
         return id;
@@ -18,14 +26,6 @@ public class Project {
 
     public void setProjectId(int projectId) {
         this.id = projectId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getName() {
@@ -44,4 +44,11 @@ public class Project {
         this.description = description;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

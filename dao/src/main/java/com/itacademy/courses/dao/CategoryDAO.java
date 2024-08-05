@@ -1,48 +1,49 @@
 package com.itacademy.courses.dao;
 
-import com.itacademy.courses.db.DBConnection;
+import com.itacademy.courses.db.HibernateSessionFactoryUtil;
 import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Category;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 public class CategoryDAO {
-    private static final String INSERT_CATEGORY_SQL = "INSERT INTO CATEGORIES (NAME, DESCRIPTION) VALUES (?, ?)";
-    private static final String DELETE_CATEGORY_SQL = "DELETE FROM CATEGORIES WHERE ID = ?";
-    private static final String UPDATE_CATEGORY_SQL = "UPDATE CATEGORIES SET NAME = ?, DESCRIPTION = ? WHERE ID = ?";
 
-    public void insertCategory(Category category) throws SQLException {
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CATEGORY_SQL)) {
-            preparedStatement.setString(1, category.getName());
-            preparedStatement.setString(2, category.getDescription());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
+    private final SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+
+    public void insertCategory(Category category) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(category);
+            transaction.commit();
         }
     }
 
-    public boolean deleteCategory(int categoryId) throws SQLException {
-        boolean rowDeleted;
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_CATEGORY_SQL)) {
-            statement.setInt(1, categoryId);
-            rowDeleted = statement.executeUpdate() > 0;
+    public boolean updateCategory(Category category) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.merge(category);
+            transaction.commit();
+            return true;
         }
-        return rowDeleted;
     }
 
-    public boolean updateCategory(Category category) throws SQLException {
-        boolean rowUpdated;
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_CATEGORY_SQL)) {
-            statement.setString(1, category.getName());
-            statement.setString(2, category.getDescription());
-            statement.setInt(3, category.getCategoryId());
-            rowUpdated = statement.executeUpdate() > 0;
+    public boolean deleteCategory(int categoryId) {
+        try (Session session = sessionFactory.openSession())  {
+            Transaction transaction = session.beginTransaction();
+            Category category = session.get(Category.class, categoryId);
+            if (category != null) {
+                session.remove(category);
+                transaction.commit();
+                return true;
+            }
+            return false;
         }
-        return rowUpdated;
+    }
+
+    public Category getCategoryById(int categoryId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Category.class, categoryId);
+        }
     }
 }

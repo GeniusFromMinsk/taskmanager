@@ -1,50 +1,55 @@
 package com.itacademy.courses.dao;
 import com.itacademy.courses.db.DBConnection;
+import com.itacademy.courses.db.HibernateSessionFactoryUtil;
 import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Subtask;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.sql.*;
 
 public class SubtaskDAO {
-    private static final String INSERT_SUBTASK_SQL = "INSERT INTO SUBTASKS (TASK_ID, TITLE, STATUS, DUE_DATE) VALUES (?, ?, ?, ?)";
-    private static final String DELETE_SUBTASK_SQL = "DELETE FROM SUBTASKS WHERE ID = ?";
-    private static final String UPDATE_SUBTASK_SQL = "UPDATE SUBTASKS SET TASK_ID = ?, TITLE = ?, STATUS = ?, DUE_DATE = ? WHERE ID = ?";
 
-    public void insertSubtask(Subtask subtask) throws SQLException {
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SUBTASK_SQL)) {
-            preparedStatement.setInt(1, subtask.getTaskId());
-            preparedStatement.setString(2, subtask.getTitle());
-            preparedStatement.setString(3, subtask.getStatus());
-            preparedStatement.setDate(4, new java.sql.Date(subtask.getDueDate().getTime()));
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
+    private final SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+
+    public void insertSubtask(Subtask subtask) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(subtask);
+            transaction.commit();
         }
     }
 
-
-    public boolean deleteSubtask(int subtaskId) throws SQLException {
-        boolean rowDeleted;
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_SUBTASK_SQL)) {
-            statement.setInt(1, subtaskId);
-            rowDeleted = statement.executeUpdate() > 0;
+    public boolean deleteSubtask(int subtaskId) {
+        boolean isDeleted = false;
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Subtask subtask = session.get(Subtask.class, subtaskId);
+            if (subtask != null) {
+                session.remove(subtask);
+                transaction.commit();
+                isDeleted = true;
+            }
         }
-        return rowDeleted;
+        return isDeleted;
     }
 
-    public boolean updateSubtask(Subtask subtask) throws SQLException {
-        boolean rowUpdated;
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_SUBTASK_SQL)) {
-            statement.setInt(1, subtask.getTaskId());
-            statement.setString(2, subtask.getTitle());
-            statement.setString(3, subtask.getStatus());
-            statement.setDate(4, new java.sql.Date(subtask.getDueDate().getTime()));
-            statement.setInt(5, subtask.getSubtaskId());
-            rowUpdated = statement.executeUpdate() > 0;
+    public boolean updateSubtask(Subtask subtask) {
+        boolean isUpdated = false;
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Subtask existingSubtask = session.get(Subtask.class, subtask.getSubtaskId());
+            if (existingSubtask != null) {
+                existingSubtask.setTaskId(subtask.getTaskId());
+                existingSubtask.setTitle(subtask.getTitle());
+                existingSubtask.setStatus(subtask.getStatus());
+                existingSubtask.setDueDate(subtask.getDueDate());
+                session.merge(existingSubtask);
+                transaction.commit();
+                isUpdated = true;
+            }
         }
-        return rowUpdated;
+        return isUpdated;
     }
 }
