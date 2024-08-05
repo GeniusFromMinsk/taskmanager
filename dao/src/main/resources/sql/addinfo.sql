@@ -9,6 +9,7 @@ INSERT INTO TASKS (USER_ID, TITLE, DESCRIPTION, STATUS, PRIORITY, DUE_DATE, REMI
                                                                                                (1, 'Task 2', 'Description for task 2', 'in progress', 'medium', '2024-06-25', '2024-06-24 14:00:00'),
                                                                                                (2, 'Task 3', 'Description for task 3', 'completed', 'low', '2024-06-15', '2024-06-24 14:00:00');
 
+
 -- Вставка тестовых данных в таблицу CATEGORIES
 INSERT INTO CATEGORIES (NAME, DESCRIPTION) VALUES
                                                ('Work', 'Tasks related to work'),
