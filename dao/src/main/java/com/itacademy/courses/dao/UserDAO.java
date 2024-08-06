@@ -1,15 +1,12 @@
 package com.itacademy.courses.dao;
 
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
+import com.itacademy.courses.models.Task;
 import com.itacademy.courses.models.User;
-import com.itacademy.courses.db.DBConnection;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
@@ -43,32 +40,18 @@ public class UserDAO {
     }
 
     public boolean updateUser(User user) {
-        boolean isUpdated = false;
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            User existingUser = session.get(User.class, user.getUserId());
-            if (existingUser != null) {
-                existingUser.setUsername(user.getUsername());
-                existingUser.setEmail(user.getEmail());
-                existingUser.setPassword(user.getPassword());
-                session.merge(existingUser);
-                transaction.commit();
-                isUpdated = true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            session.merge(user);
+            transaction.commit();
+            return true;
         }
-        return isUpdated;
     }
 
     public User getUserById(int userId) {
-        User user = null;
         try (Session session = sessionFactory.openSession()) {
-            user = session.get(User.class, userId);
-        } catch (Exception e) {
-            e.printStackTrace();
+            return session.get(User.class, userId);
         }
-        return user;
     }
 
     public List<User> getAllUsers() {

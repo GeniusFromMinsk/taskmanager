@@ -15,9 +15,6 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "user_id")
-    private int userId;
-
     @Column(name = "title")
     private String title;
 
@@ -37,7 +34,7 @@ public class Task {
     private Timestamp reminderTime;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToMany
@@ -99,14 +96,6 @@ public class Task {
         this.id = taskId;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -159,7 +148,6 @@ public class Task {
     public String toString() {
         return "Task{" +
                 "id=" + id +
-                ", user_id=" + userId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +

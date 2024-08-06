@@ -1,7 +1,6 @@
 package com.itacademy.courses.dao;
 
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
-import com.itacademy.courses.models.Project;
 import com.itacademy.courses.models.Report;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
@@ -36,6 +35,12 @@ public class ReportDAO {
             Transaction transaction = session.beginTransaction();
             session.merge(report);
             transaction.commit();
+        }
+    }
+
+    public Report getReportById(int reportId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Report.class, reportId);
         }
     }
 }

@@ -1,16 +1,13 @@
 package com.itacademy.courses.dao;
 
-import com.itacademy.courses.db.DBConnection;
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
 import com.itacademy.courses.enums.TaskFilter;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Task;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDAO {
@@ -67,9 +64,11 @@ public class TaskDAO {
     public List<Task> selectTasksByFilter(TaskFilter filter, String filterValue) {
         List<Task> tasks = null;
         try (Session session = sessionFactory.openSession()) {
-            tasks = session.createQuery(filter.getQuery(), Task.class)
-                    .setParameter(1, filterValue)
-                    .list();
+            Query<Task> query = session.createQuery(filter.getQuery(), Task.class);
+            query.setParameter("value", filterValue);
+            tasks = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return tasks;
     }

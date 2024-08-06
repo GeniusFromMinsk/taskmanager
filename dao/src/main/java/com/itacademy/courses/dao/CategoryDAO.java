@@ -1,7 +1,6 @@
 package com.itacademy.courses.dao;
 
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Category;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

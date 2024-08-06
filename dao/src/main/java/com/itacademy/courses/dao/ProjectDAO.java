@@ -1,16 +1,10 @@
 package com.itacademy.courses.dao;
 
-import com.itacademy.courses.db.DBConnection;
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Project;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProjectDAO {
     private final SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
@@ -42,6 +36,12 @@ public class ProjectDAO {
             session.merge(project);
             transaction.commit();
             return true;
+        }
+    }
+
+    public Project getProjectById(int projectId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Project.class, projectId);
         }
     }
 }

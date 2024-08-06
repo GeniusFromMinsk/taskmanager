@@ -21,25 +21,6 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws SQLException, ParseException {
-        ReportDAO reportDAO = new ReportDAO();
-        int reportId = 18; // Замените на актуальный ID существующего отчета
-        SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
 
-        // Получаем существующий отчет
-        try (Session session = sessionFactory.openSession()) {
-            Report existingReport = session.get(Report.class, reportId);
-            if (existingReport != null) {
-                // Изменяем содержание отчета
-                existingReport.setContent("Updated content for the existing report");
-
-                // Обновляем отчет через DAO
-                reportDAO.updateReport(existingReport);
-                System.out.println("Report updated: " + existingReport);
-            } else {
-                System.out.println("Report not found");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

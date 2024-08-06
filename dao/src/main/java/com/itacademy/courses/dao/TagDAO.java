@@ -1,16 +1,11 @@
 package com.itacademy.courses.dao;
 
-import com.itacademy.courses.db.DBConnection;
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
+import com.itacademy.courses.models.Subtask;
 import com.itacademy.courses.models.Tag;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TagDAO {
 
@@ -39,17 +34,17 @@ public class TagDAO {
     }
 
     public boolean updateTag(Tag tag) {
-        boolean isUpdated = false;
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            Tag existingTag = session.get(Tag.class, tag.getTagId());
-            if (existingTag != null) {
-                existingTag.setName(tag.getName());
-                session.merge(existingTag);
-                transaction.commit();
-                isUpdated = true;
-            }
+            session.merge(tag);
+            transaction.commit();
+            return true;
         }
-        return isUpdated;
+    }
+
+    public Tag getTagById(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Tag.class, id);
+        }
     }
 }
