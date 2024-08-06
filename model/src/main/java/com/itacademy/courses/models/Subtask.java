@@ -1,18 +1,39 @@
 package com.itacademy.courses.models;
 
 import java.util.Date;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "subtasks")
 public class Subtask {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "task_id")
     private int taskId;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "status")
     private String status;
 
-    private Date due_date;
+    @Column(name = "due_date")
+    private Date dueDate;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id", insertable = false, updatable = false)
+    private Task task;
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
     public int getSubtaskId() {
         return id;
@@ -47,11 +68,11 @@ public class Subtask {
     }
 
     public Date getDueDate() {
-        return due_date;
+        return dueDate;
     }
 
     public void setDueDate(Date dueDate) {
-        this.due_date = dueDate;
+        this.dueDate = dueDate;
     }
 
 }

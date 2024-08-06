@@ -1,51 +1,46 @@
 package com.itacademy.courses.dao;
 
-import com.itacademy.courses.db.DBConnection;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
+import com.itacademy.courses.db.HibernateSessionFactoryUtil;
 import com.itacademy.courses.models.Report;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.SessionFactory;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class ReportDAO {
-    private static final String INSERT_REPORT_SQL = "INSERT INTO REPORTS (USER_ID, CONTENT) VALUES (?, ?)";
-    private static final String DELETE_REPORT_SQL = "DELETE FROM REPORTS WHERE ID = ?";
-    private static final String UPDATE_REPORT_SQL = "UPDATE REPORTS SET CONTENT = ? WHERE ID = ?";
+    private final SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
 
-    public void insertReport(Report report) throws SQLException {
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_REPORT_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, report.getUserId());
-            preparedStatement.setString(2, report.getContent());
-            preparedStatement.executeUpdate();
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                report.setReportId(generatedKeys.getInt(1));
+    public void insertReport(Report report) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(report);
+            transaction.commit();
+        }
+    }
+
+    public boolean deleteReport(int reportId) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Report report = session.get(Report.class, reportId);
+            if (report != null) {
+                session.remove(report);
+                transaction.commit();
+                return true;
             }
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
+            return false;
         }
     }
 
-    public boolean deleteReport(int reportId) throws SQLException {
-        boolean rowDeleted;
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_REPORT_SQL)) {
-            statement.setInt(1, reportId);
-            rowDeleted = statement.executeUpdate() > 0;
+    public void updateReport(Report report) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.merge(report);
+            transaction.commit();
         }
-        return rowDeleted;
     }
 
-    public boolean updateReport(Report report) throws SQLException {
-        boolean rowUpdated;
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_REPORT_SQL)) {
-            statement.setString(1, report.getContent());
-            statement.setInt(2, report.getReportId());
-            rowUpdated = statement.executeUpdate() > 0;
+    public Report getReportById(int reportId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Report.class, reportId);
         }
-        return rowUpdated;
     }
 }
