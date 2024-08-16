@@ -25,15 +25,14 @@ public class SubtaskServiceTest {
     public void setup() {
         subtaskDAO = Mockito.mock(SubtaskDAO.class);
         taskDAO = Mockito.mock(TaskDAO.class);
-        subtaskService = new SubtaskService(subtaskDAO, taskDAO);
+        subtaskService = new SubtaskService(subtaskDAO);
     }
 
     @Test
     public void testCreate() {
         Subtask subtask = new Subtask();
         Task task = new Task();
-        task.setTaskId(13);
-        when(taskDAO.selectTask(13)).thenReturn(task);
+        task.setTaskId(3);
         subtask.setTaskId(task.getTaskId());
         subtask.setStatus("pending");
         subtask.setTitle("Subtask 1 for Task 1");

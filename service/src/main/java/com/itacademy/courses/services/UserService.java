@@ -1,8 +1,10 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.UserDAO;
+import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
@@ -35,4 +37,22 @@ public class UserService {
     public boolean isUserExists(String email, String username) {
         return userDAO.isUserExists(email, username);
     }
+
+    public void registerUser(User user) {
+        if (userDAO.isUserExists(user.getEmail(), user.getUsername())) {
+            System.out.println("Пользователь не был создан, такой уже существует");
+        }
+        userDAO.insertUser(user);
+    }
+
+    public User loginUser(String email, String password) {
+        List<User> users = userDAO.getAllUsers();
+        for (User user : users) {
+            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
 }

@@ -12,8 +12,7 @@ import java.util.Date;
 public class SubtaskStarter {
     public static void main(String[] args) {
         SubtaskDAO subtaskDAO = new SubtaskDAO();
-        TaskDAO taskDAO = new TaskDAO();
-        SubtaskService subtaskService = new SubtaskService(subtaskDAO, taskDAO);
+        SubtaskService subtaskService = new SubtaskService(subtaskDAO);
 
         Subtask newSubtask = new Subtask();
         newSubtask.setTaskId(4);

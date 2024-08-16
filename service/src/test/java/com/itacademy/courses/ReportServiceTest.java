@@ -22,7 +22,7 @@ public class ReportServiceTest {
     public void setup() {
         reportDAO = Mockito.mock(ReportDAO.class);
         userDAO = Mockito.mock(UserDAO.class);
-        reportService = new ReportService(reportDAO, userDAO);
+        reportService = new ReportService(reportDAO);
     }
 
     @Test

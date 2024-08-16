@@ -6,11 +6,9 @@ import com.itacademy.courses.models.Report;
 
 public class ReportService {
     private final ReportDAO reportDAO;
-    private final UserDAO userDAO;
 
-    public ReportService(ReportDAO reportDAO, UserDAO userDAO) {
+    public ReportService(ReportDAO reportDAO) {
         this.reportDAO = reportDAO;
-        this.userDAO = userDAO;
     }
 
     public void addReport(Report report) {

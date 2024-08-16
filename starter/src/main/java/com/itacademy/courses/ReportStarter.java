@@ -11,7 +11,7 @@ public class ReportStarter {
     public static void main(String[] args) {
         ReportDAO reportDAO = new ReportDAO();
         UserDAO userDAO = new UserDAO();
-        ReportService reportService = new ReportService(reportDAO, userDAO);
+        ReportService reportService = new ReportService(reportDAO);
         UserService userService = new UserService(userDAO);
 
         User user = userService.getUserById(36);
