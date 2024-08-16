@@ -1,7 +1,6 @@
 package com.itacademy.courses.dao;
 
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
-import com.itacademy.courses.models.Category;
 import com.itacademy.courses.models.Subtask;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

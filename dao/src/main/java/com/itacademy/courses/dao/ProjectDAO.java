@@ -17,25 +17,20 @@ public class ProjectDAO {
         }
     }
 
-    public boolean deleteProject(int projectId) {
+    public void deleteProject(int projectId) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             Project project = session.get(Project.class, projectId);
-            if (project != null) {
-                session.remove(project);
-                transaction.commit();
-                return true;
-            }
-            return false;
+            session.remove(project);
+            transaction.commit();
         }
     }
 
-    public boolean updateProject(Project project) {
+    public void updateProject(Project project) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.merge(project);
             transaction.commit();
-            return true;
         }
     }
 
@@ -45,3 +40,4 @@ public class ProjectDAO {
         }
     }
 }
+

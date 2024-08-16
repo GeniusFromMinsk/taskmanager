@@ -1,5 +1,7 @@
 package com.itacademy.courses;
 
+import com.itacademy.courses.dao.ProjectDAO;
+import com.itacademy.courses.dao.UserDAO;
 import com.itacademy.courses.models.Project;
 import com.itacademy.courses.models.User;
 import com.itacademy.courses.services.ProjectService;
@@ -7,8 +9,11 @@ import com.itacademy.courses.services.UserService;
 
 public class ProjectStarter {
     public static void main(String[] args) {
-        ProjectService projectService = new ProjectService();
-        UserService userService = new UserService();
+        ProjectDAO projectDAO = new ProjectDAO();
+        ProjectService projectService = new ProjectService(projectDAO);
+        UserDAO userDAO = new UserDAO();
+
+        UserService userService = new UserService(userDAO);
 
         User user = userService.getUserById(41);
         if (user == null) {
@@ -28,11 +33,7 @@ public class ProjectStarter {
 
         int projectToDeleteId = 20;
 
-        boolean isDeleted = projectService.deleteProject(projectToDeleteId);
-        if (isDeleted) {
-            System.out.println("Категория с ID " + projectToDeleteId + " успешно удалена.");
-        } else {
-            System.out.println("Категория с ID " + projectToDeleteId + " не найдена.");
-        }
+        projectService.deleteProject(projectToDeleteId);
+
     }
 }

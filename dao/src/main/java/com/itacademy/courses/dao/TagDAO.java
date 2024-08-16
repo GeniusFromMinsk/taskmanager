@@ -1,7 +1,6 @@
 package com.itacademy.courses.dao;
 
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
-import com.itacademy.courses.models.Subtask;
 import com.itacademy.courses.models.Tag;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,26 +18,20 @@ public class TagDAO {
         }
     }
 
-    public boolean deleteTag(int tagId) {
-        boolean isDeleted = false;
+    public void deleteTag(int tagId) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             Tag tag = session.get(Tag.class, tagId);
-            if (tag != null) {
-                session.remove(tag);
-                transaction.commit();
-                isDeleted = true;
-            }
+            session.remove(tag);
+            transaction.commit();
         }
-        return isDeleted;
     }
 
-    public boolean updateTag(Tag tag) {
+    public void updateTag(Tag tag) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.merge(tag);
             transaction.commit();
-            return true;
         }
     }
 

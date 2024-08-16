@@ -1,81 +1,71 @@
 package com.itacademy.courses;
 
-import com.itacademy.courses.db.HibernateSessionFactoryUtil;
+import com.itacademy.courses.dao.CategoryDAO;
 import com.itacademy.courses.models.Category;
 import com.itacademy.courses.services.CategoryService;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.*;
 
 public class CategoryServiceTest {
 
-    private static SessionFactory sessionFactory;
-    private Session session;
+    private CategoryDAO categoryDAO;
+    private CategoryService categoryService;
 
-    private static final CategoryService categoryService = new CategoryService();
-
-    @BeforeAll
-    public static void setup() {
-        sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
-        System.out.println("SessionFactory created");
-    }
-
-    @AfterAll
-    public static void tearDown() {
-        if (sessionFactory != null) sessionFactory.close();
-        System.out.println("SessionFactory destroyed");
+    @BeforeEach
+    public void setup() {
+        categoryDAO = Mockito.mock(CategoryDAO.class);
+        categoryService = new CategoryService(categoryDAO);
     }
 
     @Test
     public void testCreate() {
-        System.out.println("Running testCreate...");
-
         Category category = new Category();
         category.setName("Name");
         category.setDescription("Desc");
+
         categoryService.addCategory(category);
+
+        verify(categoryDAO, times(1)).insertCategory(category);
         assertEquals("Name", category.getName());
     }
 
     @Test
     public void testUpdate() {
-        System.out.println("Running testUpdate...");
-
         Category category = new Category();
         category.setName("Personal");
         category.setDescription("Desc");
+
         categoryService.updateCategory(category);
 
+        verify(categoryDAO, times(1)).updateCategory(category);
         assertEquals("Personal", category.getName());
     }
 
     @Test
     public void testGet() {
-        System.out.println("Running testGet...");
         int id = 36;
-        Category category = categoryService.getCategoryById(id);
-        assertEquals("New Category", category.getName());
+        Category category = new Category();
+        category.setName("New Category");
+
+        when(categoryDAO.getCategoryById(id)).thenReturn(category);
+
+        Category retrievedCategory = categoryService.getCategoryById(id);
+        assertEquals("New Category", retrievedCategory.getName());
     }
 
     @Test
     public void testDelete() {
-        System.out.println("Running testDelete...");
         int id = 46;
+
+        when(categoryDAO.getCategoryById(id)).thenReturn(null);
         categoryService.deleteCategory(id);
-        Category deletedCategory = categoryService.getCategoryById(id);
-        Assertions.assertNull(deletedCategory);
-    }
 
-    @BeforeEach
-    public void openSession() {
-        session = sessionFactory.openSession();
-        System.out.println("Session created");
-    }
-
-    @AfterEach
-    public void closeSession() {
-        if (session != null) session.close();
-        System.out.println("Session closed\n");
+        verify(categoryDAO, times(1)).deleteCategory(id);
+        assertNull(categoryService.getCategoryById(id));
     }
 }

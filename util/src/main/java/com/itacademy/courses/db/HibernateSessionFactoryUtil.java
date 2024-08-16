@@ -9,9 +9,9 @@ public class HibernateSessionFactoryUtil {
 
     private static SessionFactory sessionFactory;
 
-    private HibernateSessionFactoryUtil(){}
+    private HibernateSessionFactoryUtil() {}
 
-    public static SessionFactory getSessionFactory(){
+    public static SessionFactory getSessionFactory() {
         if(sessionFactory == null){
             try {
                 sessionFactory = new Configuration()
@@ -33,4 +33,3 @@ public class HibernateSessionFactoryUtil {
         return sessionFactory;
     }
 }
-

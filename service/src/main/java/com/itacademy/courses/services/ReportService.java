@@ -5,8 +5,13 @@ import com.itacademy.courses.dao.UserDAO;
 import com.itacademy.courses.models.Report;
 
 public class ReportService {
-    private final ReportDAO reportDAO = new ReportDAO();
-    private final UserDAO userDAO = new UserDAO();
+    private final ReportDAO reportDAO;
+    private final UserDAO userDAO;
+
+    public ReportService(ReportDAO reportDAO, UserDAO userDAO) {
+        this.reportDAO = reportDAO;
+        this.userDAO = userDAO;
+    }
 
     public void addReport(Report report) {
         reportDAO.insertReport(report);

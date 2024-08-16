@@ -1,19 +1,21 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.SubtaskDAO;
+import com.itacademy.courses.dao.TaskDAO;
 import com.itacademy.courses.models.Subtask;
 
 public class SubtaskService {
     private final SubtaskDAO subtaskDAO;
+    private final TaskDAO taskDAO;
 
-    public SubtaskService() {
-        this.subtaskDAO = new SubtaskDAO();
+    public SubtaskService(SubtaskDAO subtaskDAO, TaskDAO taskDAO) {
+        this.subtaskDAO = subtaskDAO;
+        this.taskDAO = taskDAO;
     }
 
     public void addSubtask(Subtask subtask) {
         subtaskDAO.insertSubtask(subtask);
     }
-
     public boolean deleteSubtask(int subtaskId) {
         return subtaskDAO.deleteSubtask(subtaskId);
     }

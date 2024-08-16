@@ -1,11 +1,13 @@
 package com.itacademy.courses;
 
+import com.itacademy.courses.dao.TagDAO;
 import com.itacademy.courses.models.Tag;
 import com.itacademy.courses.services.TagService;
 
 public class TagStarter {
     public static void main(String[] args) {
-        TagService tagService = new TagService();
+        TagDAO tagDAO = new TagDAO();
+        TagService tagService = new TagService(tagDAO);
 
         Tag newTag = new Tag();
         newTag.setName("New Tag");

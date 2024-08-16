@@ -7,23 +7,23 @@ public class ProjectService {
 
     private final ProjectDAO projectDAO;
 
-    public ProjectService() {
-        this.projectDAO = new ProjectDAO();
+    public ProjectService(ProjectDAO projectDAO) {
+        this.projectDAO = projectDAO;
     }
 
     public void addProject(Project project) {
         projectDAO.insertProject(project);
     }
 
-    public boolean updateProject(Project project) {
-        return projectDAO.updateProject(project);
+    public void updateProject(Project project) {
+        projectDAO.updateProject(project);
     }
 
-    public boolean deleteProject(int projectId) {
-        return projectDAO.deleteProject(projectId);
+    public Project getProjectById(int id) {
+        return projectDAO.getProjectById(id);
     }
 
-    public Project getProjectById(int categoryId) {
-        return projectDAO.getProjectById(categoryId);
+    public void deleteProject(int id) {
+        projectDAO.deleteProject(id);
     }
 }

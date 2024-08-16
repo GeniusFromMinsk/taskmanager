@@ -1,7 +1,6 @@
 package com.itacademy.courses.dao;
 
 import com.itacademy.courses.db.HibernateSessionFactoryUtil;
-import com.itacademy.courses.models.Task;
 import com.itacademy.courses.models.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
@@ -23,28 +22,20 @@ public class UserDAO {
         }
     }
 
-    public boolean deleteUser(int userId) {
-        boolean isDeleted = false;
+    public void deleteUser(int userId) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             User user = session.get(User.class, userId);
-            if (user != null) {
-                session.remove(user);
-                transaction.commit();
-                isDeleted = true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            session.remove(user);
+            transaction.commit();
         }
-        return isDeleted;
     }
 
-    public boolean updateUser(User user) {
+    public void updateUser(User user) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.merge(user);
             transaction.commit();
-            return true;
         }
     }
 

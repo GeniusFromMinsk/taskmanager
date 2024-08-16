@@ -1,89 +1,82 @@
 package com.itacademy.courses;
 
-import com.itacademy.courses.db.HibernateSessionFactoryUtil;
+import com.itacademy.courses.dao.ProjectDAO;
 import com.itacademy.courses.models.Project;
 import com.itacademy.courses.models.User;
 import com.itacademy.courses.services.ProjectService;
-import com.itacademy.courses.services.UserService;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.*;
 
 public class ProjectServiceTest {
-    private static SessionFactory sessionFactory;
-    private Session session;
 
-    private static final ProjectService projectService = new ProjectService();
-    private static final UserService userService = new UserService();
+    private ProjectDAO projectDAO;
+    private ProjectService projectService;
 
-
-    @BeforeAll
-    public static void setup() {
-        sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
-        System.out.println("SessionFactory created");
-    }
-
-    @AfterAll
-    public static void tearDown() {
-        if (sessionFactory != null) sessionFactory.close();
-        System.out.println("SessionFactory destroyed");
+    @BeforeEach
+    public void setup() {
+        projectDAO = Mockito.mock(ProjectDAO.class);
+        projectService = new ProjectService(projectDAO);
     }
 
     @Test
     public void testCreate() {
-        System.out.println("Running testCreate...");
-
         Project project = new Project();
-        User user = userService.getUserById(10);
+        User user = new User();
+        user.setUserId(10);
         project.setUser(user);
         project.setName("Name");
         project.setDescription("Desc");
+
+        doNothing().when(projectDAO).insertProject(project);
+
         projectService.addProject(project);
-        assertEquals("Name", project.getName());
+
+        verify(projectDAO, times(1)).insertProject(project);
     }
 
     @Test
     public void testUpdate() {
-        System.out.println("Running testUpdate...");
-
         Project project = new Project();
-        User user = userService.getUserById(10);
-        project.setUser(user);
-        project.setName("Name");
-        project.setDescription("Desc");
+        User user = new User();
+        user.setUserId(10);
+        project.setName("Namee");
+        project.setDescription("Descc");
+
+        doNothing().when(projectDAO).updateProject(project);
+
         projectService.updateProject(project);
 
-        assertEquals("Name", project.getName());
+        verify(projectDAO, times(1)).updateProject(project);
     }
 
     @Test
     public void testGet() {
-        System.out.println("Running testGet...");
         int id = 30;
-        Project project = projectService.getProjectById(id);
-        assertEquals("Проект A", project.getName());
+        Project project = new Project();
+        project.setName("Проект A");
+
+        when(projectDAO.getProjectById(id)).thenReturn(project);
+
+        Project retrievedProject = projectService.getProjectById(id);
+        assertEquals("Проект A", retrievedProject.getName());
     }
 
     @Test
     public void testDelete() {
-        System.out.println("Running testDelete...");
         int id = 46;
+
+        doNothing().when(projectDAO).deleteProject(id);
+        when(projectDAO.getProjectById(id)).thenReturn(null);
+
         projectService.deleteProject(id);
-        Project deletedCategory = projectService.getProjectById(id);
-        Assertions.assertNull(deletedCategory);
-    }
 
-    @BeforeEach
-    public void openSession() {
-        session = sessionFactory.openSession();
-        System.out.println("Session created");
-    }
-
-    @AfterEach
-    public void closeSession() {
-        if (session != null) session.close();
-        System.out.println("Session closed\n");
+        verify(projectDAO, times(1)).deleteProject(id);
+        Project deletedProject = projectService.getProjectById(id);
+        assertNull(deletedProject);
     }
 }

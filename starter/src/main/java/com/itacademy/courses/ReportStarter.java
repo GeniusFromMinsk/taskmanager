@@ -1,5 +1,7 @@
 package com.itacademy.courses;
 
+import com.itacademy.courses.dao.ReportDAO;
+import com.itacademy.courses.dao.UserDAO;
 import com.itacademy.courses.models.Report;
 import com.itacademy.courses.models.User;
 import com.itacademy.courses.services.ReportService;
@@ -7,8 +9,10 @@ import com.itacademy.courses.services.UserService;
 
 public class ReportStarter {
     public static void main(String[] args) {
-        ReportService reportService = new ReportService();
-        UserService userService = new UserService();
+        ReportDAO reportDAO = new ReportDAO();
+        UserDAO userDAO = new UserDAO();
+        ReportService reportService = new ReportService(reportDAO, userDAO);
+        UserService userService = new UserService(userDAO);
 
         User user = userService.getUserById(36);
         if (user == null) {

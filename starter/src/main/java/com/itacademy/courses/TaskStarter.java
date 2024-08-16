@@ -1,5 +1,7 @@
 package com.itacademy.courses;
 
+import com.itacademy.courses.dao.TaskDAO;
+import com.itacademy.courses.dao.UserDAO;
 import com.itacademy.courses.models.Task;
 import com.itacademy.courses.models.User;
 import com.itacademy.courses.services.TaskService;
@@ -15,8 +17,10 @@ import java.util.List;
 
 public class TaskStarter {
     public static void main(String[] args) throws ParseException {
-        TaskService taskService = new TaskService();
-        UserService userService = new UserService();
+        TaskDAO taskDAO = new TaskDAO();
+        TaskService taskService = new TaskService(taskDAO);
+        UserDAO userDAO = new UserDAO();
+        UserService userService = new UserService(userDAO);
 
         User user = userService.getUserById(36);
         if (user == null) {

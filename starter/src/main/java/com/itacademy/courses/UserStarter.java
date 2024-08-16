@@ -1,5 +1,6 @@
 package com.itacademy.courses;
 
+import com.itacademy.courses.dao.UserDAO;
 import com.itacademy.courses.models.User;
 import com.itacademy.courses.services.UserService;
 
@@ -7,7 +8,8 @@ import java.util.List;
 
 public class UserStarter {
     public static void main(String[] args) {
-        UserService userService = new UserService();
+        UserDAO userDAO = new UserDAO();
+        UserService userService = new UserService(userDAO);
 
         User newUser = new User();
         newUser.setUsername("newuser");

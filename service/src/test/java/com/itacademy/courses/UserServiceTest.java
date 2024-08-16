@@ -1,75 +1,75 @@
 package com.itacademy.courses;
 
-import com.itacademy.courses.db.HibernateSessionFactoryUtil;
+import com.itacademy.courses.dao.UserDAO;
 import com.itacademy.courses.models.User;
 import com.itacademy.courses.services.UserService;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.*;
-import java.text.ParseException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
-    private static SessionFactory sessionFactory;
-    private Session session;
+    private UserDAO userDAO;
+    private UserService userService;
 
-    private static final UserService userService = new UserService();
-
-    @BeforeAll
-    public static void setup() {
-        sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
-        System.out.println("SessionFactory created");
-    }
-
-    @AfterAll
-    public static void tearDown() {
-        if (sessionFactory != null) sessionFactory.close();
-        System.out.println("SessionFactory destroyed");
+    @BeforeEach
+    public void setup() {
+        userDAO = mock(UserDAO.class);
+        userService = new UserService(userDAO);
     }
 
     @Test
-    public void testCreate(){
-        System.out.println("Running testCreate...");
-
+    public void testCreate() {
         User user = new User();
         user.setPassword("1213");
         user.setUserName("Kirill");
         user.setEmail("john.doe@example.com");
+
+        doNothing().when(userDAO).insertUser(user);
+
         userService.addUser(user);
+
+        verify(userDAO, times(1)).insertUser(user);
         assertEquals("Kirill", user.getUserName());
     }
 
     @Test
-    public void testUpdate() throws ParseException {
-        System.out.println("Running testUpdate...");
-
+    public void testUpdate() {
         User user = new User();
         user.setPassword("1213");
         user.setUserName("Kirill");
         user.setEmail("john.doe@example.com");
+
+        doNothing().when(userDAO).updateUser(user);
+
         userService.updateUser(user);
 
-        assertEquals("Kirill", user.getUsername());
+        verify(userDAO, times(1)).updateUser(user);
+        assertEquals("Kirill", user.getUserName());
     }
 
     @Test
     public void testGet() {
-        System.out.println("Running testGet...");
+        User user = new User();
+        user.setUserName("john_doe");
+        when(userDAO.getUserById(3)).thenReturn(user);
+
+        User retrievedUser = userService.getUserById(3);
+        assertEquals("john_doe", retrievedUser.getUserName());
+    }
+
+    @Test
+    public void testDelete() {
         int id = 3;
-        User user = userService.getUserById(id);
-        assertEquals("john_doe", user.getUsername());
-    }
+        doNothing().when(userDAO).deleteUser(id);
+        when(userDAO.getUserById(id)).thenReturn(null);
 
-    @BeforeEach
-    public void openSession() {
-        session = sessionFactory.openSession();
-        System.out.println("Session created");
-    }
+        userService.deleteUser(id);
 
-    @AfterEach
-    public void closeSession() {
-        if (session != null) session.close();
-        System.out.println("Session closed\n");
+        verify(userDAO, times(1)).deleteUser(id);
+        User deletedUser = userService.getUserById(id);
+        assertNull(deletedUser);
     }
 }

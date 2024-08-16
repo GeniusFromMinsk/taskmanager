@@ -10,8 +10,8 @@ public class TaskService {
 
     private final TaskDAO taskDAO;
 
-    public TaskService() {
-        this.taskDAO = new TaskDAO();
+    public TaskService(TaskDAO taskDAO) {
+        this.taskDAO = taskDAO;
     }
 
     public void addTask(Task task) {

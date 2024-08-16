@@ -4,10 +4,11 @@ import com.itacademy.courses.dao.CategoryDAO;
 import com.itacademy.courses.models.Category;
 
 public class CategoryService {
+
     private final CategoryDAO categoryDAO;
 
-    public CategoryService() {
-        this.categoryDAO = new CategoryDAO();
+    public CategoryService(CategoryDAO categoryDAO) {
+        this.categoryDAO = categoryDAO;
     }
 
     public void addCategory(Category category) {

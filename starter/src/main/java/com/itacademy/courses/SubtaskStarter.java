@@ -1,5 +1,7 @@
 package com.itacademy.courses;
 
+import com.itacademy.courses.dao.SubtaskDAO;
+import com.itacademy.courses.dao.TaskDAO;
 import com.itacademy.courses.models.Subtask;
 import com.itacademy.courses.services.SubtaskService;
 
@@ -9,7 +11,9 @@ import java.util.Date;
 
 public class SubtaskStarter {
     public static void main(String[] args) {
-        SubtaskService subtaskService = new SubtaskService();
+        SubtaskDAO subtaskDAO = new SubtaskDAO();
+        TaskDAO taskDAO = new TaskDAO();
+        SubtaskService subtaskService = new SubtaskService(subtaskDAO, taskDAO);
 
         Subtask newSubtask = new Subtask();
         newSubtask.setTaskId(4);

@@ -1,11 +1,14 @@
 package com.itacademy.courses;
 
+import com.itacademy.courses.dao.CategoryDAO;
 import com.itacademy.courses.models.Category;
 import com.itacademy.courses.services.CategoryService;
 
 public class CategoryStarter {
     public static void main(String[] args) {
-        CategoryService categoryService = new CategoryService();
+
+        CategoryDAO categoryDAO = new CategoryDAO();
+        CategoryService categoryService = new CategoryService(categoryDAO);
 
         Category newCategory = new Category();
         newCategory.setName("New Category");
