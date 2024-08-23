@@ -9,6 +9,7 @@ import com.itacademy.courses.services.UserService;
 
 public class ReportStarter {
     public static void main(String[] args) {
+        /*
         ReportDAO reportDAO = new ReportDAO();
         UserDAO userDAO = new UserDAO();
         ReportService reportService = new ReportService(reportDAO);
@@ -38,5 +39,7 @@ public class ReportStarter {
         } else {
             System.out.println("Категория с ID " + reportDeleteById + " не найдена.");
         }
+
+         */
     }
 }

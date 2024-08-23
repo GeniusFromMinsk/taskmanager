@@ -2,10 +2,14 @@ package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.TagDAO;
 import com.itacademy.courses.models.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TagService {
     private final TagDAO tagDAO;
 
+    @Autowired
     public TagService(TagDAO tagDAO) {
         this.tagDAO = tagDAO;
     }

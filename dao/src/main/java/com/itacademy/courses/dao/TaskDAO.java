@@ -1,18 +1,26 @@
 package com.itacademy.courses.dao;
 
-import com.itacademy.courses.db.HibernateSessionFactoryUtil;
 import com.itacademy.courses.enums.TaskFilter;
 import com.itacademy.courses.models.Task;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class TaskDAO {
 
-    private final SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+
+    private final SessionFactory sessionFactory;
+    @Autowired
+    public TaskDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
 
     public void insertTask(Task task) {
         try (Session session = sessionFactory.openSession()) {

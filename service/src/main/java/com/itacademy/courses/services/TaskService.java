@@ -3,13 +3,16 @@ package com.itacademy.courses.services;
 import com.itacademy.courses.dao.TaskDAO;
 import com.itacademy.courses.enums.TaskFilter;
 import com.itacademy.courses.models.Task;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TaskService {
 
     private final TaskDAO taskDAO;
-
+    @Autowired
     public TaskService(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }

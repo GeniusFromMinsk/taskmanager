@@ -6,7 +6,8 @@ import com.itacademy.courses.services.TagService;
 
 public class TagStarter {
     public static void main(String[] args) {
-        TagDAO tagDAO = new TagDAO();
+        /*
+        TagDAO tagDAO = new TagDAO(sessionFactory);
         TagService tagService = new TagService(tagDAO);
 
         Tag newTag = new Tag();
@@ -17,5 +18,7 @@ public class TagStarter {
         tagService.updateTag(newTag);
 
         tagService.deleteTag(newTag.getTagId());
+
+         */
     }
 }

@@ -1,17 +1,16 @@
 package com.itacademy.courses;
 
 import com.itacademy.courses.dao.SubtaskDAO;
-import com.itacademy.courses.dao.TaskDAO;
 import com.itacademy.courses.models.Subtask;
 import com.itacademy.courses.services.SubtaskService;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
 public class SubtaskStarter {
     public static void main(String[] args) {
-        SubtaskDAO subtaskDAO = new SubtaskDAO();
+        /*
+        SubtaskDAO subtaskDAO = new SubtaskDAO(sessionFactory);
         SubtaskService subtaskService = new SubtaskService(subtaskDAO);
 
         Subtask newSubtask = new Subtask();
@@ -32,5 +31,7 @@ public class SubtaskStarter {
         } else {
             System.out.println("Категория с ID " + subTaskToDeleteById + " не найдена.");
         }
+
+         */
     }
 }

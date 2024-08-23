@@ -2,11 +2,14 @@ package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.CategoryDAO;
 import com.itacademy.courses.models.Category;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CategoryService {
 
     private final CategoryDAO categoryDAO;
-
+    @Autowired
     public CategoryService(CategoryDAO categoryDAO) {
         this.categoryDAO = categoryDAO;
     }

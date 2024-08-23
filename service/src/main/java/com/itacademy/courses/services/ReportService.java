@@ -3,10 +3,14 @@ package com.itacademy.courses.services;
 import com.itacademy.courses.dao.ReportDAO;
 import com.itacademy.courses.dao.UserDAO;
 import com.itacademy.courses.models.Report;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ReportService {
     private final ReportDAO reportDAO;
 
+    @Autowired
     public ReportService(ReportDAO reportDAO) {
         this.reportDAO = reportDAO;
     }

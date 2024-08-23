@@ -1,14 +1,21 @@
 package com.itacademy.courses.dao;
 
-import com.itacademy.courses.db.HibernateSessionFactoryUtil;
 import com.itacademy.courses.models.Category;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class CategoryDAO {
 
-    private final SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+    private final SessionFactory sessionFactory;
+
+    @Autowired
+    public CategoryDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     public void insertCategory(Category category) {
         try (Session session = sessionFactory.openSession()) {

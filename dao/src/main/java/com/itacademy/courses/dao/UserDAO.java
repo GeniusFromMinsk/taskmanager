@@ -1,16 +1,23 @@
 package com.itacademy.courses.dao;
 
-import com.itacademy.courses.db.HibernateSessionFactoryUtil;
 import com.itacademy.courses.models.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class UserDAO {
 
-    private final SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+    private final SessionFactory sessionFactory;
+
+    @Autowired
+    public UserDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     public void insertUser(User user) {
         try (Session session = sessionFactory.openSession()) {

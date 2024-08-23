@@ -8,6 +8,7 @@ import java.util.List;
 
 public class UserStarter {
     public static void main(String[] args) {
+        /*
         UserDAO userDAO = new UserDAO();
         UserService userService = new UserService(userDAO);
 
@@ -30,5 +31,8 @@ public class UserStarter {
 
         boolean exists = userService.isUserExists("newuser@example.com", "newuser");
         System.out.println("User exists: " + exists);
+        */
     }
+
+
 }

@@ -1,15 +1,16 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.UserDAO;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class UserService {
     private final UserDAO userDAO;
-
+    @Autowired
     public UserService(UserDAO userDAO) {
         this.userDAO = userDAO;
     }

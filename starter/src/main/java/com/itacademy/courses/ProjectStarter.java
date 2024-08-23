@@ -9,6 +9,7 @@ import com.itacademy.courses.services.UserService;
 
 public class ProjectStarter {
     public static void main(String[] args) {
+        /*
         ProjectDAO projectDAO = new ProjectDAO();
         ProjectService projectService = new ProjectService(projectDAO);
         UserDAO userDAO = new UserDAO();
@@ -34,6 +35,8 @@ public class ProjectStarter {
         int projectToDeleteId = 20;
 
         projectService.deleteProject(projectToDeleteId);
+
+         */
 
     }
 }

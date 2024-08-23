@@ -2,11 +2,15 @@ package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.ProjectDAO;
 import com.itacademy.courses.models.Project;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProjectService {
 
     private final ProjectDAO projectDAO;
 
+    @Autowired
     public ProjectService(ProjectDAO projectDAO) {
         this.projectDAO = projectDAO;
     }

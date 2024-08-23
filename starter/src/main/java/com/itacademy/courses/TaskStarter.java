@@ -17,7 +17,7 @@ import java.util.List;
 
 public class TaskStarter {
     public static void main(String[] args) throws ParseException {
-        TaskDAO taskDAO = new TaskDAO();
+        /*TaskDAO taskDAO = new TaskDAO();
         TaskService taskService = new TaskService(taskDAO);
         UserDAO userDAO = new UserDAO();
         UserService userService = new UserService(userDAO);
@@ -55,5 +55,7 @@ public class TaskStarter {
 
         List<Task> filteredTasks = taskService.getTasksByFilter(TaskFilter.BY_STATUS, "Pending");
         filteredTasks.forEach(System.out::println);
+
+         */
     }
 }
