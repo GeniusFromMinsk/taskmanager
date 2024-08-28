@@ -1,43 +1,29 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.ReportDAO;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
+import com.itacademy.courses.dao.UserDAO;
 import com.itacademy.courses.models.Report;
 
-import java.sql.SQLException;
-import java.util.List;
-
 public class ReportService {
-    private ReportDAO reportDAO;
+    private final ReportDAO reportDAO;
 
-    public ReportService() {
-        this.reportDAO = new ReportDAO();
+    public ReportService(ReportDAO reportDAO) {
+        this.reportDAO = reportDAO;
     }
 
-    public void createReport(Report report) {
-        try {
-            reportDAO.insertReport(report);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-        }
+    public void addReport(Report report) {
+        reportDAO.insertReport(report);
     }
 
+    public void updateReport(Report report) {
+        reportDAO.updateReport(report);
+    }
 
-    public boolean updateReport(Report report) {
-        try {
-            return reportDAO.updateReport(report);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-            return false;
-        }
+    public Report getReportById(int reportId) {
+        return reportDAO.getReportById(reportId);
     }
 
     public boolean deleteReport(int reportId) {
-        try {
-            return reportDAO.deleteReport(reportId);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-            return false;
-        }
+        return reportDAO.deleteReport(reportId);
     }
 }

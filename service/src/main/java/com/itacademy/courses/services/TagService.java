@@ -1,42 +1,28 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.TagDAO;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
 import com.itacademy.courses.models.Tag;
 
-import java.sql.SQLException;
-import java.util.List;
-
 public class TagService {
-    private TagDAO tagDAO;
+    private final TagDAO tagDAO;
 
-    public TagService() {
-        this.tagDAO = new TagDAO();
+    public TagService(TagDAO tagDAO) {
+        this.tagDAO = tagDAO;
     }
 
-    public void createTag(Tag tag) {
-        try {
-            tagDAO.insertTag(tag);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-        }
+    public void addTag(Tag tag) {
+        tagDAO.insertTag(tag);
     }
 
-    public boolean updateTag(Tag tag) {
-        try {
-            return tagDAO.updateTag(tag);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-            return false;
-        }
+    public void deleteTag(int tagId) {
+        tagDAO.deleteTag(tagId);
     }
 
-    public boolean deleteTag(int tagId) {
-        try {
-            return tagDAO.deleteTag(tagId);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-            return false;
-        }
+    public void updateTag(Tag tag) {
+        tagDAO.updateTag(tag);
+    }
+
+    public Tag getTagById(int id) {
+        return tagDAO.getTagById(id);
     }
 }

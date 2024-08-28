@@ -1,42 +1,29 @@
 package com.itacademy.courses.services;
-import com.itacademy.courses.dao.ProjectDAO;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
-import com.itacademy.courses.models.Project;
 
-import java.sql.SQLException;
-import java.util.List;
+import com.itacademy.courses.dao.ProjectDAO;
+import com.itacademy.courses.models.Project;
 
 public class ProjectService {
 
-    private ProjectDAO projectDAO;
+    private final ProjectDAO projectDAO;
 
-    public ProjectService() {
-        this.projectDAO = new ProjectDAO();
+    public ProjectService(ProjectDAO projectDAO) {
+        this.projectDAO = projectDAO;
     }
 
-    public void createProject(Project project) {
-        try {
-            projectDAO.insertProject(project);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-        }
+    public void addProject(Project project) {
+        projectDAO.insertProject(project);
     }
 
-    public boolean updateProject(Project project) {
-        try {
-            return projectDAO.updateProject(project);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-            return false;
-        }
+    public void updateProject(Project project) {
+        projectDAO.updateProject(project);
     }
 
-    public boolean deleteProject(int projectId) {
-        try {
-            return projectDAO.deleteProject(projectId);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-            return false;
-        }
+    public Project getProjectById(int id) {
+        return projectDAO.getProjectById(id);
+    }
+
+    public void deleteProject(int id) {
+        projectDAO.deleteProject(id);
     }
 }

@@ -1,19 +1,41 @@
 package com.itacademy.courses.models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "project_tasks")
 public class ProjectTask {
 
-    private int id;
-
+    @Id
+    @Column(name = "id")
     private int projectId;
 
+    @Id
+    @Column(name = "task_id")
     private int taskId;
 
-    public int getProjectTaskId() {
-        return id;
+    @ManyToOne
+    @JoinColumn(name = "project_id", insertable = false, updatable = false)
+    private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id", insertable = false, updatable = false)
+    private Task task;
+
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectTaskId(int projectTaskId) {
-        this.id = projectTaskId;
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public int getProjectId() {

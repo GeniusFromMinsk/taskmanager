@@ -1,43 +1,28 @@
 package com.itacademy.courses.services;
 
 import com.itacademy.courses.dao.SubtaskDAO;
-import com.itacademy.courses.exceptions.SQLExceptionHandler;
+import com.itacademy.courses.dao.TaskDAO;
 import com.itacademy.courses.models.Subtask;
 
-import java.sql.SQLException;
-import java.util.List;
-
 public class SubtaskService {
+    private final SubtaskDAO subtaskDAO;
 
-    private SubtaskDAO subtaskDAO;
-
-    public SubtaskService() {
-        this.subtaskDAO = new SubtaskDAO();
+    public SubtaskService(SubtaskDAO subtaskDAO) {
+        this.subtaskDAO = subtaskDAO;
     }
 
-    public void createSubtask(Subtask subtask) {
-        try {
-            subtaskDAO.insertSubtask(subtask);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-        }
+    public void addSubtask(Subtask subtask) {
+        subtaskDAO.insertSubtask(subtask);
+    }
+    public boolean deleteSubtask(int subtaskId) {
+        return subtaskDAO.deleteSubtask(subtaskId);
     }
 
     public boolean updateSubtask(Subtask subtask) {
-        try {
-            return subtaskDAO.updateSubtask(subtask);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-            return false;
-        }
+        return subtaskDAO.updateSubtask(subtask);
     }
 
-    public boolean deleteSubtask(int subtaskId) {
-        try {
-            return subtaskDAO.deleteSubtask(subtaskId);
-        } catch (SQLException e) {
-            SQLExceptionHandler.printSQLException(e);
-            return false;
-        }
+    public Subtask getSubTaskById(int id) {
+        return subtaskDAO.getSubtaskById(id);
     }
 }
