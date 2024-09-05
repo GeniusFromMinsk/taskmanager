@@ -32,8 +32,8 @@ public class SubtaskServiceTest {
     public void testCreate() {
         Subtask subtask = new Subtask();
         Task task = new Task();
-        task.setTaskId(3);
-        subtask.setTaskId(task.getTaskId());
+        task.setId(3);
+        subtask.setTaskId(task.getId());
         subtask.setStatus("pending");
         subtask.setTitle("Subtask 1 for Task 1");
         subtask.setDueDate(new Date(124, Calendar.AUGUST, 23));

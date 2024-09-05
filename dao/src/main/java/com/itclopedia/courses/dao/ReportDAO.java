@@ -1,53 +1,36 @@
 package com.itclopedia.courses.dao;
 
 import com.itclopedia.courses.models.Report;
-import org.hibernate.SessionFactory;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
 public class ReportDAO {
-    private final SessionFactory sessionFactory;
 
-    @Autowired
-    public ReportDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void insertReport(Report report) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(report);
-            transaction.commit();
-        }
+        entityManager.persist(report);
     }
 
     public boolean deleteReport(int reportId) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Report report = session.get(Report.class, reportId);
-            if (report != null) {
-                session.remove(report);
-                transaction.commit();
-                return true;
-            }
-            return false;
+        Report report = entityManager.find(Report.class, reportId);
+        if (report != null) {
+            entityManager.remove(report);
+            return true;
         }
+        return false;
     }
 
     public void updateReport(Report report) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.merge(report);
-            transaction.commit();
-        }
+        entityManager.merge(report);
     }
 
     public Report getReportById(int reportId) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Report.class, reportId);
-        }
+        return entityManager.find(Report.class, reportId);
     }
 }

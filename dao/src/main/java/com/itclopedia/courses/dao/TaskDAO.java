@@ -2,82 +2,54 @@ package com.itclopedia.courses.dao;
 
 import com.itclopedia.courses.enums.TaskFilter;
 import com.itclopedia.courses.models.Task;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@Transactional
 public class TaskDAO {
 
-
-    private final SessionFactory sessionFactory;
-    @Autowired
-    public TaskDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void insertTask(Task task) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(task);
-            transaction.commit();
-        }
+        entityManager.persist(task);
     }
 
     public Task selectTask(int taskId) {
-        Task task;
-        try (Session session = sessionFactory.openSession()) {
-            task = session.get(Task.class, taskId);
-        }
-        return task;
+        return entityManager.find(Task.class, taskId);
     }
 
     public List<Task> selectAllTasks() {
-        List<Task> tasks = null;
-        try (Session session = sessionFactory.openSession()) {
-            tasks = session.createQuery("from Task", Task.class).list();
-        }
-        return tasks;
+        return entityManager.createQuery("from Task", Task.class).getResultList();
     }
 
     public boolean deleteTask(int taskId) {
-        boolean rowDeleted = false;
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Task task = session.get(Task.class, taskId);
-            if (task != null) {
-                session.remove(task);
-                transaction.commit();
-                rowDeleted = true;
-            }
+        Task task = entityManager.find(Task.class, taskId);
+        if (task != null) {
+            entityManager.remove(task);
+            return true;
         }
-        return rowDeleted;
+        return false;
     }
 
     public boolean updateTask(Task task) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.merge(task);
-            transaction.commit();
-            return true;
-        }
+        entityManager.merge(task);
+        return true;
     }
 
     public List<Task> selectTasksByFilter(TaskFilter filter, String filterValue) {
-        List<Task> tasks = null;
-        try (Session session = sessionFactory.openSession()) {
-            Query<Task> query = session.createQuery(filter.getQuery(), Task.class);
-            query.setParameter("value", filterValue);
-            tasks = query.list();
+        try {
+            return entityManager.createQuery(filter.getQuery(), Task.class)
+                    .setParameter("value", filterValue)
+                    .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return tasks;
     }
 }

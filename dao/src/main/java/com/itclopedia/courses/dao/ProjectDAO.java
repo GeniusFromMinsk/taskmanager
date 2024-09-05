@@ -1,49 +1,34 @@
 package com.itclopedia.courses.dao;
 
 import com.itclopedia.courses.models.Project;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
 public class ProjectDAO {
-    private final SessionFactory sessionFactory;
 
-    @Autowired
-    public ProjectDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void insertProject(Project project) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(project);
-            transaction.commit();
-        }
+        entityManager.persist(project);
     }
 
     public void deleteProject(int projectId) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Project project = session.get(Project.class, projectId);
-            session.remove(project);
-            transaction.commit();
+        Project project = entityManager.find(Project.class, projectId);
+        if (project != null) {
+            entityManager.remove(project);
         }
     }
 
     public void updateProject(Project project) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.merge(project);
-            transaction.commit();
-        }
+        entityManager.merge(project);
     }
 
     public Project getProjectById(int projectId) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Project.class, projectId);
-        }
+        return entityManager.find(Project.class, projectId);
     }
 }

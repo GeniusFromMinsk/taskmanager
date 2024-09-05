@@ -1,8 +1,14 @@
 package com.itclopedia.courses.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "reports")
 public class Report {
 
@@ -16,29 +22,5 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public int getReportId() {
-        return id;
-    }
-
-    public void setReportId(int reportId) {
-        this.id = reportId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
 }

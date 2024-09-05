@@ -1,56 +1,37 @@
 package com.itclopedia.courses.dao;
 
-
 import com.itclopedia.courses.models.Category;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
 public class CategoryDAO {
 
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public CategoryDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void insertCategory(Category category) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(category);
-            transaction.commit();
-        }
+        entityManager.persist(category);
     }
 
     public boolean updateCategory(Category category) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.merge(category);
-            transaction.commit();
-            return true;
-        }
+        entityManager.merge(category);
+        return true;
     }
 
     public boolean deleteCategory(int categoryId) {
-        try (Session session = sessionFactory.openSession())  {
-            Transaction transaction = session.beginTransaction();
-            Category category = session.get(Category.class, categoryId);
-            if (category != null) {
-                session.remove(category);
-                transaction.commit();
-                return true;
-            }
-            return false;
+        Category category = entityManager.find(Category.class, categoryId);
+        if (category != null) {
+            entityManager.remove(category);
+            return true;
         }
+        return false;
     }
 
     public Category getCategoryById(int categoryId) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Category.class, categoryId);
-        }
+        return entityManager.find(Category.class, categoryId);
     }
 }

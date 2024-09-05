@@ -33,7 +33,7 @@ public class TaskServiceTest {
     public void testCreate() throws Exception {
         Task task = new Task();
         User user = new User();
-        user.setUserId(18);
+        user.setId(18);
         task.setUser(user);
         task.setStatus("in progress");
         task.setDescription("desc");
@@ -55,7 +55,7 @@ public class TaskServiceTest {
     public void testUpdate() throws Exception {
         Task task = new Task();
         User user = new User();
-        user.setUserId(1);
+        user.setId(1);
         task.setUser(user);
         task.setStatus("in progress");
         task.setPriority("high");

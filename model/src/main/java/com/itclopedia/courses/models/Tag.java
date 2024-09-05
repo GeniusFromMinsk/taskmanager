@@ -1,11 +1,17 @@
 package com.itclopedia.courses.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tags")
 public class Tag {
 
@@ -18,29 +24,5 @@ public class Tag {
 
     @ManyToMany(mappedBy = "tags")
     private Set<Task> tasks = new HashSet<>();
-
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public int getTagId() {
-        return id;
-    }
-
-    public void setTagId(int tagId) {
-        this.id = tagId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
 }

@@ -27,7 +27,7 @@ public class ProjectServiceTest {
     public void testCreate() {
         Project project = new Project();
         User user = new User();
-        user.setUserId(10);
+        user.setId(10);
         project.setUser(user);
         project.setName("Name");
         project.setDescription("Desc");
@@ -43,7 +43,7 @@ public class ProjectServiceTest {
     public void testUpdate() {
         Project project = new Project();
         User user = new User();
-        user.setUserId(10);
+        user.setId(10);
         project.setName("Namee");
         project.setDescription("Descc");
 

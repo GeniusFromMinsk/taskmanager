@@ -1,57 +1,37 @@
 package com.itclopedia.courses.dao;
 
 import com.itclopedia.courses.models.Subtask;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
 public class SubtaskDAO {
 
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public SubtaskDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void insertSubtask(Subtask subtask) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(subtask);
-            transaction.commit();
-        }
+        entityManager.persist(subtask);
     }
 
     public boolean deleteSubtask(int subtaskId) {
-        boolean isDeleted = false;
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Subtask subtask = session.get(Subtask.class, subtaskId);
-            if (subtask != null) {
-                session.remove(subtask);
-                transaction.commit();
-                isDeleted = true;
-            }
-        }
-        return isDeleted;
-    }
-
-
-    public boolean updateSubtask(Subtask subtask) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.merge(subtask);
-            transaction.commit();
+        Subtask subtask = entityManager.find(Subtask.class, subtaskId);
+        if (subtask != null) {
+            entityManager.remove(subtask);
             return true;
         }
+        return false;
+    }
+
+    public boolean updateSubtask(Subtask subtask) {
+        entityManager.merge(subtask);
+        return true;
     }
 
     public Subtask getSubtaskById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Subtask.class, id);
-        }
+        return entityManager.find(Subtask.class, id);
     }
 }

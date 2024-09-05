@@ -1,52 +1,34 @@
 package com.itclopedia.courses.dao;
 
 import com.itclopedia.courses.models.Tag;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @Repository
+@Transactional
 public class TagDAO {
 
-
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public TagDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void insertTag(Tag tag) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(tag);
-            transaction.commit();
-        }
+        entityManager.persist(tag);
     }
 
     public void deleteTag(int tagId) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Tag tag = session.get(Tag.class, tagId);
-            session.remove(tag);
-            transaction.commit();
+        Tag tag = entityManager.find(Tag.class, tagId);
+        if (tag != null) {
+            entityManager.remove(tag);
         }
     }
 
     public void updateTag(Tag tag) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.merge(tag);
-            transaction.commit();
-        }
+        entityManager.merge(tag);
     }
 
     public Tag getTagById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Tag.class, id);
-        }
+        return entityManager.find(Tag.class, id);
     }
 }

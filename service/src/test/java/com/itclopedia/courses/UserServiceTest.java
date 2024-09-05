@@ -24,7 +24,7 @@ public class UserServiceTest {
     public void testCreate() {
         User user = new User();
         user.setPassword("1213");
-        user.setUserName("Kirill");
+        user.setUsername("Kirill");
         user.setEmail("john.doe@example.com");
 
         doNothing().when(userDAO).insertUser(user);
@@ -32,14 +32,14 @@ public class UserServiceTest {
         userService.addUser(user);
 
         verify(userDAO, times(1)).insertUser(user);
-        assertEquals("Kirill", user.getUserName());
+        assertEquals("Kirill", user.getUsername());
     }
 
     @Test
     public void testUpdate() {
         User user = new User();
         user.setPassword("1213");
-        user.setUserName("Kirill");
+        user.setUsername("Kirill");
         user.setEmail("john.doe@example.com");
 
         doNothing().when(userDAO).updateUser(user);
@@ -47,17 +47,17 @@ public class UserServiceTest {
         userService.updateUser(user);
 
         verify(userDAO, times(1)).updateUser(user);
-        assertEquals("Kirill", user.getUserName());
+        assertEquals("Kirill", user.getUsername());
     }
 
     @Test
     public void testGet() {
         User user = new User();
-        user.setUserName("john_doe");
+        user.setUsername("john_doe");
         when(userDAO.getUserById(3)).thenReturn(user);
 
         User retrievedUser = userService.getUserById(3);
-        assertEquals("john_doe", retrievedUser.getUserName());
+        assertEquals("john_doe", retrievedUser.getUsername());
     }
 
     @Test

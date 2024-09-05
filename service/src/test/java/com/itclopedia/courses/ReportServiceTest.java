@@ -29,7 +29,7 @@ public class ReportServiceTest {
     public void testCreate() {
         Report report = new Report();
         User user = new User();
-        user.setUserId(10);
+        user.setId(10);
         when(userDAO.getUserById(10)).thenReturn(user);
 
         report.setUser(user);
