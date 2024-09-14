@@ -1,32 +1,34 @@
 package com.itclopedia.courses;
 
-import com.itclopedia.courses.dao.TaskDAO;
-import com.itclopedia.courses.dao.UserDAO;
+import com.itclopedia.courses.enums.TaskFilter;
 import com.itclopedia.courses.models.Task;
 import com.itclopedia.courses.models.User;
+import com.itclopedia.courses.dao.TaskRepository;
+import com.itclopedia.courses.dao.UserRepository;
 import com.itclopedia.courses.services.TaskService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.jpa.domain.Specification;
+import specification.TaskSpecifications;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 public class TaskServiceTest {
-    private TaskDAO taskDAO;
-    private UserDAO userDAO;
+    private TaskRepository taskRepository;
+    private UserRepository userRepository;
     private TaskService taskService;
 
     @BeforeEach
     public void setup() {
-        taskDAO = mock(TaskDAO.class);
-        userDAO = mock(UserDAO.class);
-        taskService = new TaskService(taskDAO);
+        taskRepository = mock(TaskRepository.class);
+        userRepository = mock(UserRepository.class);
+        taskService = new TaskService(taskRepository);
     }
 
     @Test
@@ -43,11 +45,11 @@ public class TaskServiceTest {
         Timestamp timestamp = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-08-24 14:00:00").getTime());
         task.setReminderTime(timestamp);
 
-        when(userDAO.getUserById(18)).thenReturn(user);
+        when(userRepository.findById(18)).thenReturn(Optional.of(user));
 
         taskService.addTask(task);
 
-        verify(taskDAO, times(1)).insertTask(task);
+        verify(taskRepository, times(1)).save(task);
         assertEquals("in progress", task.getStatus());
     }
 
@@ -67,7 +69,7 @@ public class TaskServiceTest {
 
         taskService.updateTask(task);
 
-        verify(taskDAO, times(1)).updateTask(task);
+        verify(taskRepository, times(1)).save(task);
         assertEquals("in progress", task.getStatus());
     }
 
@@ -75,7 +77,7 @@ public class TaskServiceTest {
     public void testGet() {
         Task task = new Task();
         task.setStatus("in progress");
-        when(taskDAO.selectTask(2)).thenReturn(task);
+        when(taskRepository.findById(2)).thenReturn(Optional.of(task));
 
         Task retrievedTask = taskService.getTaskById(2);
         assertEquals("in progress", retrievedTask.getStatus());
@@ -84,12 +86,31 @@ public class TaskServiceTest {
     @Test
     public void testDelete() {
         int id = 24;
-        when(taskDAO.selectTask(id)).thenReturn(null);
+        when(taskRepository.existsById(id)).thenReturn(true);
 
         taskService.deleteTask(id);
 
-        verify(taskDAO, times(1)).deleteTask(id);
+        verify(taskRepository, times(1)).deleteById(id);
+        when(taskRepository.findById(id)).thenReturn(Optional.empty());
         Task deletedTask = taskService.getTaskById(id);
         assertNull(deletedTask);
+    }
+
+    @Test
+    void testGetTasksByFilter() {
+        Task task1 = new Task();
+        task1.setStatus("OPEN");
+
+        Task task2 = new Task();
+        task2.setStatus("CLOSED");
+
+        List<Task> tasks = List.of(task1);
+
+        when(taskRepository.findAll(any(Specification.class))).thenReturn(tasks);
+
+        List<Task> result = taskService.getTasksByFilter(TaskFilter.BY_STATUS, "OPEN");
+
+        assertEquals(1, result.size());
+        assertEquals("OPEN", result.get(0).getStatus());
     }
 }

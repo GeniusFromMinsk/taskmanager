@@ -1,12 +1,14 @@
 package com.itclopedia.courses;
 
-import com.itclopedia.courses.dao.ProjectDAO;
 import com.itclopedia.courses.models.Project;
 import com.itclopedia.courses.models.User;
+import com.itclopedia.courses.dao.ProjectRepository;
 import com.itclopedia.courses.services.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -14,13 +16,13 @@ import static org.mockito.Mockito.*;
 
 public class ProjectServiceTest {
 
-    private ProjectDAO projectDAO;
+    private ProjectRepository projectRepository;
     private ProjectService projectService;
 
     @BeforeEach
     public void setup() {
-        projectDAO = Mockito.mock(ProjectDAO.class);
-        projectService = new ProjectService(projectDAO);
+        projectRepository = Mockito.mock(ProjectRepository.class);
+        projectService = new ProjectService(projectRepository);
     }
 
     @Test
@@ -32,11 +34,11 @@ public class ProjectServiceTest {
         project.setName("Name");
         project.setDescription("Desc");
 
-        doNothing().when(projectDAO).insertProject(project);
+        when(projectRepository.save(project)).thenReturn(project);
 
         projectService.addProject(project);
 
-        verify(projectDAO, times(1)).insertProject(project);
+        verify(projectRepository, times(1)).save(project);
     }
 
     @Test
@@ -47,11 +49,11 @@ public class ProjectServiceTest {
         project.setName("Namee");
         project.setDescription("Descc");
 
-        doNothing().when(projectDAO).updateProject(project);
+        when(projectRepository.save(project)).thenReturn(project);
 
         projectService.updateProject(project);
 
-        verify(projectDAO, times(1)).updateProject(project);
+        verify(projectRepository, times(1)).save(project);
     }
 
     @Test
@@ -60,7 +62,7 @@ public class ProjectServiceTest {
         Project project = new Project();
         project.setName("Проект A");
 
-        when(projectDAO.getProjectById(id)).thenReturn(project);
+        when(projectRepository.findById(id)).thenReturn(Optional.of(project));
 
         Project retrievedProject = projectService.getProjectById(id);
         assertEquals("Проект A", retrievedProject.getName());
@@ -70,12 +72,12 @@ public class ProjectServiceTest {
     public void testDelete() {
         int id = 46;
 
-        doNothing().when(projectDAO).deleteProject(id);
-        when(projectDAO.getProjectById(id)).thenReturn(null);
+        doNothing().when(projectRepository).deleteById(id);
 
         projectService.deleteProject(id);
 
-        verify(projectDAO, times(1)).deleteProject(id);
+        verify(projectRepository, times(1)).deleteById(id);
+        when(projectRepository.findById(id)).thenReturn(Optional.empty());
         Project deletedProject = projectService.getProjectById(id);
         assertNull(deletedProject);
     }

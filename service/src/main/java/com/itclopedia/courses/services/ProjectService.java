@@ -1,6 +1,6 @@
 package com.itclopedia.courses.services;
 
-import com.itclopedia.courses.dao.ProjectDAO;
+import com.itclopedia.courses.dao.ProjectRepository;
 import com.itclopedia.courses.models.Project;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,39 +10,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectService {
 
-    private final ProjectDAO projectDAO;
+    private final ProjectRepository projectRepository;
 
     @Autowired
-    public ProjectService(ProjectDAO projectDAO) {
-        this.projectDAO = projectDAO;
+    public ProjectService(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
     }
 
     public void addProject(Project project) {
-        log.info("Adding project: {}", project);
-        projectDAO.insertProject(project);
-        log.info("Project added successfully: {}", project);
+        projectRepository.save(project);
     }
 
     public void updateProject(Project project) {
-        log.info("Updating project: {}", project);
-        projectDAO.updateProject(project);
-        log.info("Project updated successfully: {}", project);
+        projectRepository.save(project);
     }
 
     public Project getProjectById(int id) {
-        log.info("Fetching project with ID: {}", id);
-        Project project = projectDAO.getProjectById(id);
-        if (project != null) {
-            log.info("Project found: {}", project);
-        } else {
-            log.warn("Project not found with ID: {}", id);
-        }
-        return project;
+        return projectRepository.findById(id).orElse(null);
     }
 
     public void deleteProject(int id) {
-        log.info("Deleting project with ID: {}", id);
-        projectDAO.deleteProject(id);
-        log.info("Project deleted successfully with ID: {}", id);
+        projectRepository.deleteById(id);
     }
 }

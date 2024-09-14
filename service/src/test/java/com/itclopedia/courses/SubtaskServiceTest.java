@@ -1,15 +1,16 @@
 package com.itclopedia.courses;
 
-import com.itclopedia.courses.dao.SubtaskDAO;
-import com.itclopedia.courses.dao.TaskDAO;
 import com.itclopedia.courses.models.Subtask;
 import com.itclopedia.courses.models.Task;
+import com.itclopedia.courses.dao.SubtaskRepository;
 import com.itclopedia.courses.services.SubtaskService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -17,15 +18,13 @@ import static org.mockito.Mockito.*;
 
 public class SubtaskServiceTest {
 
-    private SubtaskDAO subtaskDAO;
+    private SubtaskRepository subtaskRepository;
     private SubtaskService subtaskService;
-    private TaskDAO taskDAO;
 
     @BeforeEach
     public void setup() {
-        subtaskDAO = Mockito.mock(SubtaskDAO.class);
-        taskDAO = Mockito.mock(TaskDAO.class);
-        subtaskService = new SubtaskService(subtaskDAO);
+        subtaskRepository = Mockito.mock(SubtaskRepository.class);
+        subtaskService = new SubtaskService(subtaskRepository);
     }
 
     @Test
@@ -38,9 +37,11 @@ public class SubtaskServiceTest {
         subtask.setTitle("Subtask 1 for Task 1");
         subtask.setDueDate(new Date(124, Calendar.AUGUST, 23));
 
+        when(subtaskRepository.save(subtask)).thenReturn(subtask);
+
         subtaskService.addSubtask(subtask);
 
-        verify(subtaskDAO, times(1)).insertSubtask(subtask);
+        verify(subtaskRepository, times(1)).save(subtask);
         assertEquals("pending", subtask.getStatus());
     }
 
@@ -52,9 +53,11 @@ public class SubtaskServiceTest {
         subtask.setTitle("Updated Subtask");
         subtask.setDueDate(new Date());
 
+        when(subtaskRepository.save(subtask)).thenReturn(subtask);
+
         subtaskService.updateSubtask(subtask);
 
-        verify(subtaskDAO, times(1)).updateSubtask(subtask);
+        verify(subtaskRepository, times(1)).save(subtask);
     }
 
     @Test
@@ -62,7 +65,7 @@ public class SubtaskServiceTest {
         Subtask subtask = new Subtask();
         subtask.setStatus("pending");
 
-        when(subtaskDAO.getSubtaskById(28)).thenReturn(subtask);
+        when(subtaskRepository.findById(28)).thenReturn(Optional.of(subtask));
 
         Subtask retrievedSubtask = subtaskService.getSubTaskById(28);
         assertEquals("pending", retrievedSubtask.getStatus());
@@ -72,10 +75,14 @@ public class SubtaskServiceTest {
     public void testDelete() {
         int id = 33;
 
-        when(subtaskDAO.getSubtaskById(id)).thenReturn(null);
+        when(subtaskRepository.existsById(id)).thenReturn(true);
+        doNothing().when(subtaskRepository).deleteById(id);
+
         subtaskService.deleteSubtask(id);
 
-        verify(subtaskDAO, times(1)).deleteSubtask(id);
-        assertNull(subtaskService.getSubTaskById(id));
+        verify(subtaskRepository, times(1)).deleteById(id);
+        when(subtaskRepository.findById(id)).thenReturn(Optional.empty());
+        Subtask deletedSubtask = subtaskService.getSubTaskById(id);
+        assertNull(deletedSubtask);
     }
 }
