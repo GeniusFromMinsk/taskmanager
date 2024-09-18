@@ -1,32 +1,36 @@
 package com.itclopedia.courses.services;
 
-import com.itclopedia.courses.dao.CategoryDAO;
+import com.itclopedia.courses.dao.CategoryRepository;
 import com.itclopedia.courses.models.Category;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class CategoryService {
 
-    private final CategoryDAO categoryDAO;
+    private final CategoryRepository categoryRepository;
+
     @Autowired
-    public CategoryService(CategoryDAO categoryDAO) {
-        this.categoryDAO = categoryDAO;
+    public CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
     }
 
     public void addCategory(Category category) {
-        categoryDAO.insertCategory(category);
+        categoryRepository.save(category);
     }
 
-    public boolean updateCategory(Category category) {
-        return categoryDAO.updateCategory(category);
+    public void updateCategory(Category category) {
+        categoryRepository.save(category);
     }
 
-    public boolean deleteCategory(int categoryId) {
-        return categoryDAO.deleteCategory(categoryId);
+    public void deleteCategory(int categoryId) {
+        categoryRepository.deleteById(categoryId);
+
     }
 
     public Category getCategoryById(int categoryId) {
-        return categoryDAO.getCategoryById(categoryId);
+        return categoryRepository.findById(categoryId).orElse(null);
     }
 }

@@ -1,32 +1,35 @@
 package com.itclopedia.courses.services;
 
-import com.itclopedia.courses.dao.ReportDAO;
 import com.itclopedia.courses.models.Report;
+import com.itclopedia.courses.dao.ReportRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class ReportService {
-    private final ReportDAO reportDAO;
+
+    private final ReportRepository reportRepository;
 
     @Autowired
-    public ReportService(ReportDAO reportDAO) {
-        this.reportDAO = reportDAO;
+    public ReportService(ReportRepository reportRepository) {
+        this.reportRepository = reportRepository;
     }
 
     public void addReport(Report report) {
-        reportDAO.insertReport(report);
+        reportRepository.save(report);
     }
 
     public void updateReport(Report report) {
-        reportDAO.updateReport(report);
+        reportRepository.save(report);
     }
 
     public Report getReportById(int reportId) {
-        return reportDAO.getReportById(reportId);
+        return reportRepository.findById(reportId).orElse(null);
     }
 
-    public boolean deleteReport(int reportId) {
-        return reportDAO.deleteReport(reportId);
+    public void deleteReport(int reportId) {
+        reportRepository.deleteById(reportId);
     }
 }

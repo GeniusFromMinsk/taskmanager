@@ -1,4 +1,4 @@
-package com.itclopedia.courses.aspect;
+package aspect;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;

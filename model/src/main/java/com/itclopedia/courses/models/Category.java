@@ -1,8 +1,14 @@
 package com.itclopedia.courses.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "categories")
 public class Category {
 
@@ -16,36 +22,4 @@ public class Category {
     @Column(name = "description")
     private String description;
 
-    public int getCategoryId() {
-        return id;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.id = categoryId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

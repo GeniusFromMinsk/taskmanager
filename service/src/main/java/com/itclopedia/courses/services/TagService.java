@@ -1,32 +1,35 @@
 package com.itclopedia.courses.services;
 
-import com.itclopedia.courses.dao.TagDAO;
+import com.itclopedia.courses.dao.TagRepository;
 import com.itclopedia.courses.models.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class TagService {
-    private final TagDAO tagDAO;
+
+    private final TagRepository tagRepository;
 
     @Autowired
-    public TagService(TagDAO tagDAO) {
-        this.tagDAO = tagDAO;
+    public TagService(TagRepository tagRepository) {
+        this.tagRepository = tagRepository;
     }
 
     public void addTag(Tag tag) {
-        tagDAO.insertTag(tag);
+        tagRepository.save(tag);
     }
 
     public void deleteTag(int tagId) {
-        tagDAO.deleteTag(tagId);
+        tagRepository.deleteById(tagId);
     }
 
     public void updateTag(Tag tag) {
-        tagDAO.updateTag(tag);
+        tagRepository.save(tag);
     }
 
     public Tag getTagById(int id) {
-        return tagDAO.getTagById(id);
+        return tagRepository.findById(id).orElse(null);
     }
 }

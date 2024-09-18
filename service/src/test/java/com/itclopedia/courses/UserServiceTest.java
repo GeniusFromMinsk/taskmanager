@@ -1,74 +1,76 @@
 package com.itclopedia.courses;
 
-import com.itclopedia.courses.dao.UserDAO;
 import com.itclopedia.courses.models.User;
+import com.itclopedia.courses.dao.UserRepository;
 import com.itclopedia.courses.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
-    private UserDAO userDAO;
+    private UserRepository userRepository;
     private UserService userService;
 
     @BeforeEach
     public void setup() {
-        userDAO = mock(UserDAO.class);
-        userService = new UserService(userDAO);
+        userRepository = mock(UserRepository.class);
+        userService = new UserService(userRepository);
     }
 
     @Test
     public void testCreate() {
         User user = new User();
         user.setPassword("1213");
-        user.setUserName("Kirill");
+        user.setUsername("Kirill");
         user.setEmail("john.doe@example.com");
 
-        doNothing().when(userDAO).insertUser(user);
+        when(userRepository.save(user)).thenReturn(user);
 
         userService.addUser(user);
 
-        verify(userDAO, times(1)).insertUser(user);
-        assertEquals("Kirill", user.getUserName());
+        verify(userRepository, times(1)).save(user);
+        assertEquals("Kirill", user.getUsername());
     }
 
     @Test
     public void testUpdate() {
         User user = new User();
         user.setPassword("1213");
-        user.setUserName("Kirill");
+        user.setUsername("Kirill");
         user.setEmail("john.doe@example.com");
 
-        doNothing().when(userDAO).updateUser(user);
+        when(userRepository.save(user)).thenReturn(user);
 
         userService.updateUser(user);
 
-        verify(userDAO, times(1)).updateUser(user);
-        assertEquals("Kirill", user.getUserName());
+        verify(userRepository, times(1)).save(user);
+        assertEquals("Kirill", user.getUsername());
     }
 
     @Test
     public void testGet() {
         User user = new User();
-        user.setUserName("john_doe");
-        when(userDAO.getUserById(3)).thenReturn(user);
+        user.setUsername("john_doe");
+        when(userRepository.findById(3)).thenReturn(Optional.of(user));
 
         User retrievedUser = userService.getUserById(3);
-        assertEquals("john_doe", retrievedUser.getUserName());
+        assertEquals("john_doe", retrievedUser.getUsername());
     }
 
     @Test
     public void testDelete() {
-        int id = 3;
-        doNothing().when(userDAO).deleteUser(id);
-        when(userDAO.getUserById(id)).thenReturn(null);
+        int id = 24;
+        when(userRepository.existsById(id)).thenReturn(true);
 
         userService.deleteUser(id);
 
-        verify(userDAO, times(1)).deleteUser(id);
+        verify(userRepository, times(1)).deleteById(id);
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
         User deletedUser = userService.getUserById(id);
         assertNull(deletedUser);
     }

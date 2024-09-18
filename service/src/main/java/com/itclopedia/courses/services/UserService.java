@@ -1,53 +1,54 @@
 package com.itclopedia.courses.services;
 
-import com.itclopedia.courses.dao.UserDAO;
+import com.itclopedia.courses.dao.UserRepository;
 import com.itclopedia.courses.models.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserService {
-    private final UserDAO userDAO;
+
+    private final UserRepository userRepository;
+
     @Autowired
-    public UserService(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public void addUser(User user) {
-        userDAO.insertUser(user);
+        userRepository.save(user);
     }
 
     public void deleteUser(int userId) {
-        userDAO.deleteUser(userId);
+        userRepository.deleteById(userId);
     }
 
     public void updateUser(User user) {
-        userDAO.updateUser(user);
+        userRepository.save(user);
     }
 
     public User getUserById(int userId) {
-        return userDAO.getUserById(userId);
-    }
-
-    public List<User> getAllUsers() {
-        return userDAO.getAllUsers();
+        return userRepository.findById(userId).orElse(null);
     }
 
     public boolean isUserExists(String email, String username) {
-        return userDAO.isUserExists(email, username);
+        return userRepository.existsByEmailOrUsername(email, username);
     }
 
     public void registerUser(User user) {
-        if (userDAO.isUserExists(user.getEmail(), user.getUsername())) {
+        if (isUserExists(user.getEmail(), user.getUsername())) {
             System.out.println("Пользователь не был создан, такой уже существует");
+        } else {
+            userRepository.save(user);
         }
-        userDAO.insertUser(user);
     }
 
     public User loginUser(String email, String password) {
-        List<User> users = userDAO.getAllUsers();
+        List<User> users = userRepository.findAll();
         for (User user : users) {
             if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
                 return user;
@@ -55,5 +56,4 @@ public class UserService {
         }
         return null;
     }
-
 }
