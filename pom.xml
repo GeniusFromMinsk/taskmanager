@@ -15,6 +15,7 @@
         <module>model</module>
         <module>util</module>
         <module>starter</module>
+        <module>dto</module>
     </modules>
 
     <properties>
@@ -44,6 +45,11 @@
                 <artifactId>lombok</artifactId>
                 <version>1.18.34</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>3.1.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

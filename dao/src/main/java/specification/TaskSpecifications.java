@@ -10,8 +10,9 @@ public class TaskSpecifications {
                 return criteriaBuilder.equal(root.get("priority"), value);
             } else if (fieldName.equals("status")) {
                 return criteriaBuilder.equal(root.get("status"), value);
+            } else {
+                throw new IllegalArgumentException("Invalid field for filtering: " + fieldName);
             }
-            return criteriaBuilder.conjunction();
         };
     }
 }

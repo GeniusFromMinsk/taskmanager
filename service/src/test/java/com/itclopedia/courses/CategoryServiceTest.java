@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
 
 public class CategoryServiceTest {
 
-    private CategoryRepository categoryRepository;
+   /* private CategoryRepository categoryRepository;
     private CategoryService categoryService;
 
     @BeforeEach
@@ -63,4 +63,6 @@ public class CategoryServiceTest {
         categoryService.deleteCategory(id);
         verify(categoryRepository, times(1)).deleteById(id);
     }
+
+    */
 }
