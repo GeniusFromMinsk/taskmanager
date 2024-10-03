@@ -20,13 +20,13 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> addCategory(@RequestBody CategoryDTO categoryDTO) {
         categoryService.addCategory(categoryDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<String> updateCategory(@RequestBody CategoryDTO categoryDTO) {
         categoryService.updateCategory(categoryDTO);
         return new ResponseEntity<>(HttpStatus.OK);

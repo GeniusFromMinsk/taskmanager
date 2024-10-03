@@ -21,7 +21,7 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> addTag(@RequestBody TagDTO tagDTO) {
         try {
             tagService.addTag(tagDTO);
@@ -31,7 +31,7 @@ public class TagController {
         }
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<String> updateTag(@RequestBody TagDTO tagDTO) {
         try {
             tagService.updateTag(tagDTO);

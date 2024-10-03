@@ -20,13 +20,13 @@ public class SubtaskController {
         this.subtaskService = subtaskService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> addSubtask(@RequestBody SubtaskDTO subtaskDTO) {
         subtaskService.addSubtask(subtaskDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<String> updateSubtask(@RequestBody SubtaskDTO subtaskDTO) {
         subtaskService.updateSubtask(subtaskDTO);
         return new ResponseEntity<>(HttpStatus.OK);

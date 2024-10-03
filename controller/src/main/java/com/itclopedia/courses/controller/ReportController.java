@@ -20,13 +20,13 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> addReport(@RequestBody ReportDTO reportDTO) {
         reportService.addReport(reportDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<String> updateReport(@RequestBody ReportDTO reportDTO) {
         reportService.updateReport(reportDTO);
         return new ResponseEntity<>(HttpStatus.OK);

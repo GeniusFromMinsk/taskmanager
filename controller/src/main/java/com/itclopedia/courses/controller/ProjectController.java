@@ -20,13 +20,13 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> addProject(@RequestBody ProjectDTO projectDTO) {
         projectService.addProject(projectDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<String> updateProject(@RequestBody ProjectDTO projectDTO) {
         projectService.updateProject(projectDTO);
         return new ResponseEntity<>(HttpStatus.OK);

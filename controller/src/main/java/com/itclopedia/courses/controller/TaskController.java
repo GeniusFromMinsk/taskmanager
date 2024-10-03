@@ -21,13 +21,13 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> addTask(@RequestBody TaskDTO taskDTO) {
         taskService.addTask(taskDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<String> updateTask(@RequestBody TaskDTO taskDTO) {
         taskService.updateTask(taskDTO);
         return new ResponseEntity<>(HttpStatus.OK);

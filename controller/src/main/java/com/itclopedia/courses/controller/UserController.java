@@ -20,7 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
         try {
             userService.registerUser(userDTO);
@@ -31,7 +31,7 @@ public class UserController {
         }
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<String> updateUser(@RequestBody UserDTO userDTO) {
         try {
             userService.updateUser(userDTO);
