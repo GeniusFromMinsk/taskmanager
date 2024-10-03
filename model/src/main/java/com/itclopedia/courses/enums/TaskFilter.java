@@ -1,18 +1,16 @@
 package com.itclopedia.courses.enums;
 
 public enum TaskFilter {
+    BY_STATUS("status"),
+    BY_PRIORITY("priority");
 
-    BY_STATUS("FROM Task WHERE status = :value"),
-    BY_PRIORITY("FROM Task WHERE priority = :value");
+    private final String fieldName;
 
-    private final String query;
-
-    TaskFilter(String query) {
-        this.query = query;
+    TaskFilter(String fieldName) {
+        this.fieldName = fieldName;
     }
 
-    public String getQuery() {
-        return query;
+    public String getFieldName() {
+        return fieldName;
     }
-
 }

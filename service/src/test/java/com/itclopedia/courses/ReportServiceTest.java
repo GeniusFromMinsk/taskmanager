@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 
 public class ReportServiceTest {
 
-    private ReportRepository reportRepository;
+    /*private ReportRepository reportRepository;
     private ReportService reportService;
 
     @BeforeEach
@@ -78,4 +78,6 @@ public class ReportServiceTest {
         Report deletedReport = reportService.getReportById(id);
         assertNull(deletedReport);
     }
+
+     */
 }

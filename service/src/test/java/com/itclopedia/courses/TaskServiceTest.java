@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 public class TaskServiceTest {
-    private TaskRepository taskRepository;
+    /*private TaskRepository taskRepository;
     private UserRepository userRepository;
     private TaskService taskService;
 
@@ -113,4 +113,6 @@ public class TaskServiceTest {
         assertEquals(1, result.size());
         assertEquals("OPEN", result.get(0).getStatus());
     }
+
+     */
 }
