@@ -1,5 +1,7 @@
 package com.itclopedia.courses.controller;
 
+import com.itclopedia.courses.dto.SubtaskDTO;
+import com.itclopedia.courses.dto.TaskDTO;
 import com.itclopedia.courses.models.Subtask;
 import com.itclopedia.courses.services.SubtaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,22 @@ public class SubtaskController {
         this.subtaskService = subtaskService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addSubtask(@RequestBody Subtask subtask) {
-        subtaskService.addSubtask(subtask);
+    @PostMapping()
+    public ResponseEntity<String> addSubtask(@RequestBody SubtaskDTO subtaskDTO) {
+        subtaskService.addSubtask(subtaskDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<String> updateSubtask(@RequestBody Subtask subtask) {
-        subtaskService.updateSubtask(subtask);
+    @PutMapping()
+    public ResponseEntity<String> updateSubtask(@RequestBody SubtaskDTO subtaskDTO) {
+        subtaskService.updateSubtask(subtaskDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Subtask> getSubtaskById(@PathVariable int id) {
-        return new ResponseEntity<>(subtaskService.getSubtaskById(id), HttpStatus.OK);
+    public ResponseEntity<SubtaskDTO> getSubtaskById(@PathVariable int id) {
+        SubtaskDTO subtaskDTO = subtaskService.getSubtaskById(id);
+        return new ResponseEntity<>(subtaskDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

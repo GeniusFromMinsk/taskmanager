@@ -1,7 +1,9 @@
 package com.itclopedia.courses.services;
 
 import com.itclopedia.courses.dao.TagRepository;
+import com.itclopedia.courses.dto.TagDTO;
 import com.itclopedia.courses.exceptions.EntityAlreadyExistsException;
+import com.itclopedia.courses.mapper.TagMapper;
 import com.itclopedia.courses.models.Tag;
 import com.itclopedia.courses.exceptions.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,19 +16,23 @@ public class TagService {
 
     private final TagRepository tagRepository;
 
+    private final TagMapper tagMapper = TagMapper.INSTANCE;
+
     @Autowired
     public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
 
-    public void addTag(Tag tag) {
+    public void addTag(TagDTO tagDTO) {
+        Tag tag = tagMapper.toTag(tagDTO);
         if (tagRepository.existsById(tag.getId())) {
             throw new EntityAlreadyExistsException("Tag", tag.getId());
         }
         tagRepository.save(tag);
     }
 
-    public void updateTag(Tag tag) {
+    public void updateTag(TagDTO tagDTO) {
+        Tag tag = tagMapper.toTag(tagDTO);
         if (!tagRepository.existsById(tag.getId())) {
             throw new EntityNotFoundException("Tag", tag.getId());
         }
@@ -40,8 +46,9 @@ public class TagService {
         tagRepository.deleteById(tagId);
     }
 
-    public Tag getTagById(int id) {
-        return tagRepository.findById(id)
+    public TagDTO getTagById(int id) {
+        Tag tag = tagRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Tag", id));
+        return tagMapper.toTagDTO(tag);
     }
 }

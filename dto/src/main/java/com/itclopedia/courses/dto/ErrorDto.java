@@ -1,4 +1,4 @@
-package com.itacademy.courses.dto;
+package com.itclopedia.courses.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

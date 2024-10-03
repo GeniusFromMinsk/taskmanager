@@ -1,5 +1,7 @@
 package com.itclopedia.courses.controller;
 
+import com.itclopedia.courses.dto.ReportDTO;
+import com.itclopedia.courses.dto.TaskDTO;
 import com.itclopedia.courses.models.Report;
 import com.itclopedia.courses.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,22 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addReport(@RequestBody Report report) {
-        reportService.addReport(report);
+    @PostMapping()
+    public ResponseEntity<String> addReport(@RequestBody ReportDTO reportDTO) {
+        reportService.addReport(reportDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateReport(@RequestBody Report report) {
-        reportService.updateReport(report);
+    @PutMapping()
+    public ResponseEntity<String> updateReport(@RequestBody ReportDTO reportDTO) {
+        reportService.updateReport(reportDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getReportById(@PathVariable int id) {
-        return new ResponseEntity<>(reportService.getReportById(id), HttpStatus.OK);
+    public ResponseEntity<ReportDTO> getReportById(@PathVariable int id) {
+        ReportDTO reportDTO = reportService.getReportById(id);
+        return new ResponseEntity<>(reportDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -1,8 +1,7 @@
 package com.itclopedia.courses.controller;
 
-import com.itacademy.courses.dto.TaskDTO;
+import com.itclopedia.courses.dto.TaskDTO;
 import com.itclopedia.courses.enums.TaskFilter;
-import com.itclopedia.courses.models.Task;
 import com.itclopedia.courses.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,21 +21,22 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addTask(@RequestBody Task task) {
-        taskService.addTask(task);
+    @PostMapping()
+    public ResponseEntity<String> addTask(@RequestBody TaskDTO taskDTO) {
+        taskService.addTask(taskDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<String> updateTask(@RequestBody Task task) {
-        taskService.updateTask(task);
+    @PutMapping()
+    public ResponseEntity<String> updateTask(@RequestBody TaskDTO taskDTO) {
+        taskService.updateTask(taskDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable int id) {
-        return new ResponseEntity<>(taskService.getTaskById(id), HttpStatus.OK);
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable int id) {
+        TaskDTO taskDTO = taskService.getTaskById(id);
+        return new ResponseEntity<>(taskDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

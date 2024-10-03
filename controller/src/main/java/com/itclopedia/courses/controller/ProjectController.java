@@ -1,5 +1,7 @@
 package com.itclopedia.courses.controller;
 
+import com.itclopedia.courses.dto.ProjectDTO;
+import com.itclopedia.courses.dto.TaskDTO;
 import com.itclopedia.courses.models.Project;
 import com.itclopedia.courses.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,22 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addProject(@RequestBody Project project) {
-        projectService.addProject(project);
+    @PostMapping()
+    public ResponseEntity<String> addProject(@RequestBody ProjectDTO projectDTO) {
+        projectService.addProject(projectDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateProject(@RequestBody Project project) {
-        projectService.updateProject(project);
+    @PutMapping()
+    public ResponseEntity<String> updateProject(@RequestBody ProjectDTO projectDTO) {
+        projectService.updateProject(projectDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProjectById(@PathVariable int id) {
-        return new ResponseEntity<>(projectService.getProjectById(id), HttpStatus.OK);
+    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable int id) {
+        ProjectDTO projectDTO = projectService.getProjectById(id);
+        return new ResponseEntity<>(projectDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -1,5 +1,7 @@
 package com.itclopedia.courses.controller;
 
+import com.itclopedia.courses.dto.CategoryDTO;
+import com.itclopedia.courses.dto.TagDTO;
 import com.itclopedia.courses.models.Category;
 import com.itclopedia.courses.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,22 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addCategory(@RequestBody Category category) {
-        categoryService.addCategory(category);
+    @PostMapping()
+    public ResponseEntity<String> addCategory(@RequestBody CategoryDTO categoryDTO) {
+        categoryService.addCategory(categoryDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateCategory(@RequestBody Category category) {
-        categoryService.updateCategory(category);
+    @PutMapping()
+    public ResponseEntity<String> updateCategory(@RequestBody CategoryDTO categoryDTO) {
+        categoryService.updateCategory(categoryDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCategoryById(@PathVariable int id) {
-        return new ResponseEntity<>(categoryService.getCategoryById(id), HttpStatus.OK);
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable int id) {
+        CategoryDTO tagDTO = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(tagDTO);
     }
 
     @DeleteMapping("/{id}")
