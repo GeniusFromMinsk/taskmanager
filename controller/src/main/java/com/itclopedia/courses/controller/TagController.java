@@ -1,10 +1,9 @@
 package com.itclopedia.courses.controller;
 
 import com.itclopedia.courses.dto.TagDTO;
-import com.itclopedia.courses.dto.UserDTO;
-import com.itclopedia.courses.models.Tag;
 import com.itclopedia.courses.services.TagService;
-import com.sun.source.tree.TryTree;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/tags")
+@Tag(name = "Тэги")
 public class TagController {
 
     private final TagService tagService;
@@ -21,6 +21,7 @@ public class TagController {
         this.tagService = tagService;
     }
 
+    @Operation(summary = "Добавление тега")
     @PostMapping
     public ResponseEntity<String> addTag(@RequestBody TagDTO tagDTO) {
         try {
@@ -31,6 +32,7 @@ public class TagController {
         }
     }
 
+    @Operation(summary = "Обновление тега")
     @PutMapping
     public ResponseEntity<String> updateTag(@RequestBody TagDTO tagDTO) {
         try {
@@ -41,12 +43,14 @@ public class TagController {
         }
     }
 
+    @Operation(summary = "Получение тега по id")
     @GetMapping("/{id}")
     public ResponseEntity<TagDTO> getTagById(@PathVariable int id) {
         TagDTO tagDTO = tagService.getTagById(id);
         return ResponseEntity.ok(tagDTO);
     }
 
+    @Operation(summary = "Удаление тега по id")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTag(@PathVariable int id) {
         tagService.deleteTag(id);

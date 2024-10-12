@@ -1,9 +1,8 @@
 package com.itclopedia.courses.controller;
 
 import com.itclopedia.courses.dto.CategoryDTO;
-import com.itclopedia.courses.dto.TagDTO;
-import com.itclopedia.courses.models.Category;
 import com.itclopedia.courses.services.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/categories")
+@Tag(name = "Категории задач")
 public class CategoryController {
 
     private final CategoryService categoryService;
