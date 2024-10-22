@@ -47,9 +47,11 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User", userId));
         return userMapper.toUserDTO(user);
     }
+
     public boolean isUserExists(String email, String username) {
         return userRepository.existsByEmail(email) || userRepository.existsByUsername(username);
     }
+
     public UserDTO getUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityStringNotFoundException("User", username));
@@ -61,6 +63,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityStringNotFoundException("User", email));
         return userMapper.toUserDTO(user);
     }
+
     public User save(User user) {
         if (isUserExists(user.getEmail(), user.getUsername())) {
             throw new EntityAlreadyExistsStringException("User with email or username", user.getEmail());
@@ -68,14 +71,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public UserDetailsService getUserDetailsService() {
+        return this::getByUsername;
+    }
+
     public User getByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-
-    }
-
-    public UserDetailsService userDetailsService() {
-        return this::getByUsername;
     }
 
     public User getCurrentUser() {

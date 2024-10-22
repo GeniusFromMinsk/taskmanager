@@ -1,8 +1,8 @@
 package com.itclopedia.courses.security.service;
 
+import com.itclopedia.courses.security.config.JwtAuthenticationResponse;
 import com.itclopedia.courses.enums.Role;
 import com.itclopedia.courses.models.User;
-import com.itclopedia.courses.security.config.JwtAuthenticationResponse;
 import com.itclopedia.courses.security.dto.SignInRequestDTO;
 import com.itclopedia.courses.security.dto.SignUpRequestDT0;
 import com.itclopedia.courses.services.UserService;
@@ -16,9 +16,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
     private final UserService userService;
+
     private final JwtService jwtService;
+
     private final PasswordEncoder passwordEncoder;
+
     private final AuthenticationManager authenticationManager;
 
     /**
@@ -55,7 +59,7 @@ public class AuthenticationService {
         ));
 
         var user = userService
-                .userDetailsService()
+                .getUserDetailsService()
                 .loadUserByUsername(request.getUsername());
 
         var jwt = jwtService.generateToken(user);
