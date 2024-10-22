@@ -3,7 +3,7 @@ package com.itclopedia.courses.controller;
 import com.itclopedia.courses.security.config.JwtAuthenticationResponse;
 import com.itclopedia.courses.security.dto.SignInRequestDTO;
 import com.itclopedia.courses.security.dto.SignUpRequestDT0;
-import com.itclopedia.courses.security.service.AuthenticationService;
+import com.itclopedia.courses.security.service.impl.AuthenticationServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Аутентификация")
 public class AuthController {
-    private final AuthenticationService authenticationService;
+    private final AuthenticationServiceImpl authenticationService;
 
     @Operation(summary = "Регистрация пользователя")
     @PostMapping("/sign-up")
