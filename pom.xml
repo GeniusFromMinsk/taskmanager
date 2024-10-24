@@ -17,6 +17,7 @@
         <module>starter</module>
         <module>dto</module>
         <module>controller</module>
+        <module>security</module>
     </modules>
 
     <properties>

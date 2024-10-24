@@ -9,6 +9,9 @@ import com.itclopedia.courses.exceptions.EntityNotFoundException;
 import com.itclopedia.courses.exceptions.EntityStringNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
@@ -26,7 +29,7 @@ public class UserService {
 
     public void updateUser(UserDTO userDTO) {
         User user = userMapper.toUser(userDTO);
-        if (!userRepository.existsById(user.getId())) {
+        if (!userRepository.existsById(Math.toIntExact(user.getId()))) {
             throw new EntityNotFoundException("User", user.getId());
         }
         userRepository.save(user);
@@ -49,22 +52,6 @@ public class UserService {
         return userRepository.existsByEmail(email) || userRepository.existsByUsername(username);
     }
 
-    public void registerUser(UserDTO userDTO) {
-        User user = userMapper.toUser(userDTO);
-        if (isUserExists(user.getEmail(), user.getUsername())) {
-            throw new EntityAlreadyExistsStringException("User with email or username", user.getEmail());
-        }
-        userRepository.save(user);
-    }
-
-    public UserDTO loginUser(String email, String password) {
-        return userRepository.findAll().stream()
-                .filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password))
-                .findFirst()
-                .map(userMapper::toUserDTO)
-                .orElse(null);
-    }
-
     public UserDTO getUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityStringNotFoundException("User", username));
@@ -76,4 +63,26 @@ public class UserService {
                 .orElseThrow(() -> new EntityStringNotFoundException("User", email));
         return userMapper.toUserDTO(user);
     }
+
+    public User save(User user) {
+        if (isUserExists(user.getEmail(), user.getUsername())) {
+            throw new EntityAlreadyExistsStringException("User with email or username", user.getEmail());
+        }
+        return userRepository.save(user);
+    }
+
+    public UserDetailsService getUserDetailsService() {
+        return this::getByUsername;
+    }
+
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+    }
+
+    public User getCurrentUser() {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByUsername(username);
+    }
+
 }

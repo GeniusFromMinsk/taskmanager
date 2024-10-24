@@ -13,10 +13,10 @@ public class ProjectDTO {
 
     private String description;
 
-    private int userId;
+    private Integer userId;
 
     @JsonCreator
-    public ProjectDTO(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("description") String description, @JsonProperty("user_id") int userId) {
+    public ProjectDTO(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("description") String description, @JsonProperty("user_id") Integer userId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -47,11 +47,11 @@ public class ProjectDTO {
         this.description = description;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 }

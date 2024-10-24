@@ -17,9 +17,9 @@ public class TaskDTO {
     private String priority;
     private Date dueDate;
     private Timestamp reminderTime;
-    private int userId;
+    private Integer userId;
     @JsonCreator
-    public TaskDTO(@JsonProperty("id") int id, @JsonProperty("title") String title,@JsonProperty("description") String description, @JsonProperty("status") String status, @JsonProperty("priority") String priority, @JsonProperty("due_date") Date dueDate, @JsonProperty("reminder_time") Timestamp reminderTime, @JsonProperty("user_id") int userId) {
+    public TaskDTO(@JsonProperty("id") int id, @JsonProperty("title") String title,@JsonProperty("description") String description, @JsonProperty("status") String status, @JsonProperty("priority") String priority, @JsonProperty("due_date") Date dueDate, @JsonProperty("reminder_time") Timestamp reminderTime, @JsonProperty("user_id") Integer userId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -78,11 +78,11 @@ public class TaskDTO {
         this.reminderTime = reminderTime;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

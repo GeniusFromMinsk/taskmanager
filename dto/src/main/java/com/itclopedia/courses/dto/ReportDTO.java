@@ -13,10 +13,10 @@ public class ReportDTO {
 
     private String content;
 
-    private int userId;
+    private Integer userId;
 
     @JsonCreator
-    public ReportDTO(@JsonProperty("id") int id, @JsonProperty("content") String content, @JsonProperty("user_id") int userId) {
+    public ReportDTO(@JsonProperty("id") int id, @JsonProperty("content") String content, @JsonProperty("user_id") Integer userId) {
         this.id = id;
         this.content = content;
         this.userId = userId;
@@ -38,11 +38,11 @@ public class ReportDTO {
         this.content = content;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 }
