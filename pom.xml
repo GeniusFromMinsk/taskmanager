@@ -18,6 +18,8 @@
         <module>dto</module>
         <module>controller</module>
         <module>security</module>
+        <module>analytics-service</module>
+        <module>notification</module>
     </modules>
 
     <properties>
